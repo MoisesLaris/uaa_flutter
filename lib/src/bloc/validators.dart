@@ -25,4 +25,15 @@ class Validators {
       }
     },
   );
+
+  final validarString = StreamTransformer<String,String>.fromHandlers(
+    handleData: (password, sink) {
+
+      if(password.length > 0){
+        sink.add(password);
+      }else{
+        sink.addError('El campo no puede estar vacío');
+      }
+    },
+  );
 }
