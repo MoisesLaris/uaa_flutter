@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:form_validation/src/bloc/provider.dart';
 import 'package:form_validation/src/models/response_model.dart';
+import 'package:form_validation/src/pages/home_page.dart';
 import 'package:form_validation/src/providers/usuario_provider.dart';
+import 'package:form_validation/src/widgets/flushbar_feedback.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
 class LoginPage extends StatelessWidget {
@@ -10,12 +12,25 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(
-      children: <Widget>[
-        _crearFondo(context),
-        _loginForm(context),
-      ],
-    ));
+      body: FutureBuilder(
+        future: usuarioProvider.verifyJWT(),
+        builder: (context, snapshot) {
+           if (!snapshot.hasData) 
+              return Center(child: CircularProgressIndicator());
+            else
+              return _redireccion(context, snapshot.data);
+        },
+      ),
+    );
+  }
+
+  Widget _redireccion(BuildContext context, bool redirect) {
+    if (redirect) {
+      return HomePage();
+    }
+    return Stack(
+      children: <Widget>[_crearFondo(context), _loginForm(context)],
+    );
   }
 
   Widget _crearFondo(BuildContext context) {
@@ -136,9 +151,9 @@ class LoginPage extends StatelessWidget {
             ),
           ),
           FlatButton(
-            onPressed: () => Navigator.pushReplacementNamed(context, 'registro'),
-            child: Text('Crear una nueva cuenta')
-          ),
+              onPressed: () =>
+                  Navigator.pushReplacementNamed(context, 'registro'),
+              child: Text('Crear una nueva cuenta')),
           SizedBox(
             height: 100.0,
           )
@@ -156,13 +171,13 @@ class LoginPage extends StatelessWidget {
           child: TextField(
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
                 suffixIcon: Icon(Icons.email, color: Colors.deepPurple),
                 hintText: 'ejemplo@correo.com',
                 labelText: 'Correo electrónico',
                 counterText: snapshot.data,
-                errorText: snapshot.error
-              ),
+                errorText: snapshot.error),
             onChanged: bloc.changeEmail,
           ),
         );
@@ -179,12 +194,12 @@ class LoginPage extends StatelessWidget {
           child: TextField(
             obscureText: true,
             decoration: InputDecoration(
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
-              suffixIcon: Icon(Icons.lock, color: Colors.deepPurple),
-              labelText: 'Contraseña',
-              counterText: snapshot.data,
-              errorText: snapshot.error
-            ),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                suffixIcon: Icon(Icons.lock, color: Colors.deepPurple),
+                labelText: 'Contraseña',
+                counterText: snapshot.data,
+                errorText: snapshot.error),
             onChanged: bloc.changePassword,
           ),
         );
@@ -193,64 +208,46 @@ class LoginPage extends StatelessWidget {
   }
 
   Widget _crearBoton(LoginBloc bloc) {
-
     // formValidStream
     // snapshot.hasdata true ? algositure : algosifalse
 
     return StreamBuilder(
-      stream: bloc.formValidStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return RaisedButton(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 20.0),
-          child: Text('Ingresar'),
-        ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-        elevation: 0.0,
-        color: Colors.deepPurple,
-        textColor: Colors.white,
-        onPressed: snapshot.hasData ? () => _login(bloc, context) : null
-        );
-      } 
-    );
+        stream: bloc.formValidStream,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          return RaisedButton(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 20.0),
+                child: Text('Ingresar'),
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0)),
+              elevation: 0.0,
+              color: Colors.deepPurple,
+              textColor: Colors.white,
+              onPressed: snapshot.hasData ? () => _login(bloc, context) : null);
+        });
   }
 
-  _login(LoginBloc bloc, BuildContext context) async{
-    final pr = ProgressDialog(context,type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
-    pr.style(message: 'Iniciando sessión',insetAnimCurve: Curves.easeInOut,);
+  _login(LoginBloc bloc, BuildContext context) async {
+    final pr = ProgressDialog(context,
+        type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
+    pr.style(
+      message: 'Iniciando sessión',
+      insetAnimCurve: Curves.easeInOut,
+    );
     await pr.show();
     ResponseModel responseModel = await this.usuarioProvider.login(bloc.email, bloc.password);
-    if(responseModel.success){
+    if (responseModel.success) {
       pr.update(message: responseModel.message);
       await pr.hide();
-    }else{
+      Navigator.pushReplacementNamed(context, 'home');
+      FlushbarFeedback.flushbar_feedback(
+          context, 'Bienvenido', ' ', Icons.home, true);
+    } else {
       await pr.hide();
-      _mostrarAlerta(context, responseModel.message);
+      FlushbarFeedback.flushbar_feedback(
+          context, responseModel.message, ' ', Icons.cancel, false);
     }
     // Navigator.pushNamed(context, 'home');
-    
-  }
-
-  Widget _mostrarAlerta(BuildContext context, String message) {
-    showDialog(
-      context: context,
-      builder: (context){
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0)
-          ),
-          title: Icon(Icons.error, color: Colors.red, size: 50.0,),
-          content: Text(message),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Ok'),
-              onPressed: (){
-                  Navigator.pop(context);
-              },
-            )
-          ],
-        );
-      }
-    );
   }
 }

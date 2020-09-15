@@ -19,52 +19,66 @@ class PreferenciasUsuario{
   }
 
   //Ninguna de estas propiedades se usa
-  // bool _colorSecundario;
-  // int _genero;
+  // bool _email;
+  // int _apellidos;
   // String _nombre;
 
-  //GET y SET del genero
+  //GET y SET del apellidos
 
   get token{
-    return _prefs.getString('token') ?? '';
+    return _prefs.getString('token') ?? ' ';
   }
 
   set token(String token){
     this._prefs.setString('token', token);
   }
 
-  get genero{
-    return _prefs.getInt('genero') ?? 1;
+  get apellidos{
+    return _prefs.getString('apellidos') ?? '';
   }
 
-  set genero(int value){
-    this._prefs.setInt('genero', value);
+  set apellidos(String value){
+    this._prefs.setString('apellidos', value);
   }
   
-  get colorSecundario{
-    return _prefs.getBool('color') ?? false;
+  get email{
+    return _prefs.getString('email') ?? '';
   }
 
-  set colorSecundario(bool value){
-    this._prefs.setBool('color', value);
+  set email(String value){
+    this._prefs.setString('email', value);
   }
 
   get nombre{
-    return _prefs.getString('nombre') ?? 'Ninguno';
+    return _prefs.getString('nombre') ?? '';
   }
 
   set nombre(String value){
     this._prefs.setString('nombre', value);
   }
 
-
-  get ultimaPagina {
-    return _prefs.getString('ultimaPagina') ?? 'home';
+  get isAdmin{
+    return _prefs.getBool('isAdmin') ?? false;
   }
 
-  set ultimaPagina(String value){
-    this._prefs.setString('ultimaPagina', value);
+  set isAdmin(bool value){
+    this._prefs.setBool('isAdmin', value);
   }
 
+  get image{
+    return _prefs.getString('image') ?? '';
+  }
+
+  set image(String value){
+    this._prefs.setString('image', value);
+  }
+
+  get idUser{
+    return _prefs.getString('idUser');
+  }
+
+  set idUser(String value){
+    this._prefs.setString('idUser', value);
+  }
 
 }
