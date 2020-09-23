@@ -58,6 +58,7 @@ class _PostTypeControlState extends State<PostTypeControl> {
 
   Widget _crearCards(BuildContext context){
     return ListView.builder(
+      physics: BouncingScrollPhysics(),
       itemCount: listaTiposPublicaciones.length,
       itemBuilder: (context, index){
         return Container(

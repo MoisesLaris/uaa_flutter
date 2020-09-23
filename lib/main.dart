@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:form_validation/src/bloc/provider.dart';
+import 'package:form_validation/src/pages/faq/questions/questions_control_page.dart';
 import 'package:form_validation/src/pages/home_page.dart';
 import 'package:form_validation/src/pages/auth_pages/login_page.dart';
 import 'package:form_validation/src/pages/menu/admin_pages/postType/postType_control_page.dart';
 import 'package:form_validation/src/pages/menu/admin_pages/users/user_page.dart';
 import 'package:form_validation/src/pages/auth_pages/registro_page.dart';
+import 'package:form_validation/src/pages/menu/user_pages/faq/new_faq.dart';
 import 'package:form_validation/src/preferencias_usuario/preferencias_usuario.dart';
 
 void main() async{
@@ -31,7 +33,11 @@ class MyApp extends StatelessWidget {
           'registro': (BuildContext context) => RegisterPage(),
           //Admin pages
           'users': (BuildContext context) => UserPage(),
-          'postType': (BuildContext context) => PostTypeControl()
+          'postType': (BuildContext context) => PostTypeControl(),
+          //User pages
+          'newFaq': (BuildContext context) => NewFAQ(),
+          //Quiestion pages
+          'questions': (BuildContext context) => QuestionControlPage()
         },
       ),
     );

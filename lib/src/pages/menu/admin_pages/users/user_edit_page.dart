@@ -226,22 +226,14 @@ class _UserEditPageState extends State<UserEditPage> {
       await pr.show();
       ResponseModel response = await usuarioProvider.nuevoUsuarioAdmin(this.widget.user.nombre, this.widget.user.apellidos, this.widget.user.email, this.widget.user.password, this.widget.user.isAdmin);
       await pr.hide();
-      if(response.success){
-        FlushbarFeedback.flushbar_feedback(context, response.message, ' ', Icons.check, true);
-        _formKey.currentState.reset();
-      }else{
-        FlushbarFeedback.flushbar_feedback(context, response.message, ' ', Icons.cancel, false);
-      }
+      FlushbarFeedback.flushbar_feedback(context, response.message, ' ', response.success);
+
     }else{
       pr.style( message: 'Editando usuario', insetAnimCurve: Curves.easeInOut, );
       await pr.show();
       ResponseModel response = await usuarioProvider.editUser(this.widget.user);
       await pr.hide();
-      if(response.success){
-        FlushbarFeedback.flushbar_feedback(context, response.message, ' ', Icons.check, true);
-      }else{
-        FlushbarFeedback.flushbar_feedback(context, response.message, ' ', Icons.cancel, false);
-      }
+      FlushbarFeedback.flushbar_feedback(context, response.message, ' ', response.success);
     }
   }
 

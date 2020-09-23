@@ -2,6 +2,7 @@
 class ApisEnum{
   //Url
   static const url = 'https://dry-anchorage-61118.herokuapp.com';
+  // static const url = 'http://34.125.72.116:3800';
   // static const url = 'http://192.168.15.13:3800';
 
   //Auth
@@ -24,4 +25,10 @@ class ApisEnum{
   static const newPostType = '/api/tipo/newTipo';
   static const editPostType = '/api/tipo/editTipo';
   static const deletePostType = '/api/tipo/deleteTipo';
+
+  //Post 
+
+  static const newPost = '/api/publicacion/newPublicacion';
+  static const getPosts = '/api/publicacion/preguntas/?';
+
 }

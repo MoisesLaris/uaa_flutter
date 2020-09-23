@@ -116,7 +116,7 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
       final res = await usuarioProvider.uploadImage(File(img.path));
       await pr.hide();
       FlushbarFeedback.flushbar_feedback(
-          context, 'Imagen', res.message, Icons.check_circle, res.success);
+          context, 'Imagen', res.message, res.success);
     }
     setState(() {
       if (img != null) {

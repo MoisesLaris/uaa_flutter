@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class FlushbarFeedback {
   
 
-  static void flushbar_feedback(BuildContext context,String title,String message,IconData icon,bool success){
+  static void flushbar_feedback(BuildContext context,String title,String message,bool success){
     Flushbar(
       padding: EdgeInsets.all(10.0),
       margin: EdgeInsets.fromLTRB(10.0, 0, 10.0, 64.0),
@@ -23,7 +23,7 @@ class FlushbarFeedback {
       forwardAnimationCurve: Curves.fastLinearToSlowEaseIn,
       duration: Duration(seconds: 1),
       icon: Icon(
-        icon,
+        success ? Icons.check_circle : Icons.cancel,
         size: 40.0,
         color: Colors.white,
       ),

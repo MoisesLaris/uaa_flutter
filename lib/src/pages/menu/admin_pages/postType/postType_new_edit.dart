@@ -102,10 +102,6 @@ class _PostTypeNewEditState extends State<PostTypeNewEdit> {
             ),
             _inputNombre(),
             _inputDescripcion(),
-            // _inputApellidos(),
-            // this.widget.newUser ? _inputEmail() : Container(),
-            // this.widget.newUser ? _inputPassword() : Container(),
-            // _inputIsAdmin(),
             _saveButton()
           ],
         ),
@@ -201,22 +197,14 @@ class _PostTypeNewEditState extends State<PostTypeNewEdit> {
       await pr.show();
       ResponseModel response = await _postTypeProvider.newPostType(this.widget.postType.nombre, this.widget.postType.descripcion);
       await pr.hide();
-      if(response.success){
-        FlushbarFeedback.flushbar_feedback(context, response.message, ' ', Icons.check, true);
-        _formKey.currentState.reset();
-      }else{
-        FlushbarFeedback.flushbar_feedback(context, response.message, ' ', Icons.cancel, false);
-      }
+      FlushbarFeedback.flushbar_feedback(context, response.message, ' ', response.success);
     }else{
       pr.style( message: 'Editando tipo publicación', insetAnimCurve: Curves.easeInOut, );
       await pr.show();
       ResponseModel response = await _postTypeProvider.editPostType(this.widget.postType.id,this.widget.postType.nombre, this.widget.postType.descripcion);
       await pr.hide();
-      if(response.success){
-        FlushbarFeedback.flushbar_feedback(context, response.message, ' ', Icons.check, true);
-      }else{
-        FlushbarFeedback.flushbar_feedback(context, response.message, ' ', Icons.cancel, false);
-      }
+        FlushbarFeedback.flushbar_feedback(context, response.message, ' ', response.success);
+
     }
   }
 

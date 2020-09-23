@@ -242,11 +242,11 @@ class LoginPage extends StatelessWidget {
       await pr.hide();
       Navigator.pushReplacementNamed(context, 'home');
       FlushbarFeedback.flushbar_feedback(
-          context, 'Bienvenido', ' ', Icons.home, true);
+          context, 'Bienvenido', ' ', true);
     } else {
       await pr.hide();
       FlushbarFeedback.flushbar_feedback(
-          context, responseModel.message, ' ', Icons.cancel, false);
+          context, responseModel.message, ' ', false);
     }
     // Navigator.pushNamed(context, 'home');
   }
