@@ -62,7 +62,7 @@ class Post {
     json.containsKey('tipoPublicacion') ? this.tipoPublicacion = json['tipoPublicacion'] : this.tipoPublicacion = ''; 
     //json.containsKey('comentarios') ? this.comentarios = json['comentarios'] : this.comentarios = ''; 
     json.containsKey('isQuestion') ? this.isQuestion = json['isQuestion'] : this.isQuestion = true; 
-    json.containsKey('fecha') ? this.fecha = json['fecha'] : this.fecha = new DateTime.now(); 
+    json.containsKey('fecha') ? this.fecha = DateTime.parse(json['fecha']) : this.fecha = new DateTime.now(); 
     json.containsKey('image') ? this.image = json['image'] : this.image = 'none'; 
 
     this.users = [];

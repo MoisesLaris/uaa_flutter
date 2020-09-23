@@ -3,7 +3,7 @@ class ApisEnum{
   //Url
   static const url = 'https://dry-anchorage-61118.herokuapp.com';
   // static const url = 'http://34.125.72.116:3800';
-  // static const url = 'http://192.168.15.13:3800';
+  // static const url = 'http://192.168.15.18:3800';
 
   //Auth
   static const login = '/api/usuario/login';

@@ -153,7 +153,7 @@ class _NewFAQState extends State<NewFAQ> {
   }
 
   _fnPostNewQuestion() async{
-    ResponseModel res = await _postProvider.newPost(_titulo, _body, false);
+    ResponseModel res = await _postProvider.newPost(_titulo, _body, true);
     FlushbarFeedback.flushbar_feedback(context, res.message, ' ', res.success);
     if(res.success) this._formKey.currentState.reset();
     setState(() {
