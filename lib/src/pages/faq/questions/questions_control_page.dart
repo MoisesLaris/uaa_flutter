@@ -42,10 +42,6 @@ class _QuestionControlPageState extends State<QuestionControlPage> {
               if(snapshot.hasData){
                 print(snapshot.data);
                 return PostQuestion(posts: snapshot.data, siguientePagina: postProvider.getPost);
-                // return MovieHorizontal(
-                //   peliculas: snapshot.data,
-                //   siguientePagina: peliculas.getPopulares,
-                // );
               }else{
                 return Center(child: CircularProgressIndicator());
               }

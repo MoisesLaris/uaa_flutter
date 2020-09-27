@@ -67,6 +67,7 @@ class _NewFAQState extends State<NewFAQ> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       child: TextFormField(
+        textCapitalization: TextCapitalization.sentences,
         validator: (value) {
           if(value.isEmpty){
             return 'Ingrese pregunta';
@@ -93,6 +94,7 @@ class _NewFAQState extends State<NewFAQ> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       child: TextFormField(
+        textCapitalization: TextCapitalization.sentences,
         maxLines: 5,
         validator: (value) {
           if(value.isEmpty){

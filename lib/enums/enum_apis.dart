@@ -30,5 +30,8 @@ class ApisEnum{
 
   static const newPost = '/api/publicacion/newPublicacion';
   static const getPosts = '/api/publicacion/preguntas/?';
+  static const likePost = '/api/publicacion/likePost';
+  static const getFavoriteQuestions = '/api/publicacion/preguntasFavoritas/?';
+  static const getMyQuestions = '/api/publicacion/misPreguntas/?';
 
 }

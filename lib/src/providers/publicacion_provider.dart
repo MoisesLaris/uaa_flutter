@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:form_validation/enums/enum_apis.dart';
 import 'package:form_validation/src/models/post_model.dart';
 import 'package:form_validation/src/models/response_model.dart';
@@ -66,5 +67,15 @@ class PostProvider extends FatherClass{
     Map<String,dynamic> res = await apiProvider.post_api(auth_data,ApisEnum.newPost);
     print(res);
     return this.reponseModelPostApi(res);
+  }
+
+  Future<bool> likePost(dynamic id) async {
+    final auth_data = {
+      'id': id
+    };
+    Map<String,dynamic> res = await apiProvider.post_api(auth_data,ApisEnum.likePost);
+    final like = this.reponseModelPostApi(res);
+    print(res);
+    return like.id;
   }
 }

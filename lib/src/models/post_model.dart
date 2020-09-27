@@ -19,9 +19,9 @@ class Post {
   String id;
   String titulo;
   String mensaje;
-  String idUser;
+  User idUser;
   String tipoPublicacion;
-  List<User> users;
+  List<dynamic> users;
   String comentarios;
   bool isQuestion;
   DateTime fecha;
@@ -45,7 +45,7 @@ class Post {
     this.id = '';
     this.titulo = '';
     this.mensaje = '';
-    this.idUser = '';
+    this.idUser = new User.empty();
     this.tipoPublicacion = '';
     this.users = [];
     this.comentarios = '';
@@ -58,18 +58,14 @@ class Post {
     json.containsKey('_id') ? this.id = json['_id'] : this.id = ''; 
     json.containsKey('titulo') ? this.titulo = json['titulo'] : this.titulo = ''; 
     json.containsKey('mensaje') ? this.mensaje = json['mensaje'] : this.mensaje = ''; 
-    json.containsKey('idUser') ? this.idUser = json['idUser'] : this.idUser = ''; 
+    json.containsKey('idUser') ? this.idUser = User.fromJsonMap(json['idUser']) : this.idUser = new User.empty(); 
     json.containsKey('tipoPublicacion') ? this.tipoPublicacion = json['tipoPublicacion'] : this.tipoPublicacion = ''; 
     //json.containsKey('comentarios') ? this.comentarios = json['comentarios'] : this.comentarios = ''; 
     json.containsKey('isQuestion') ? this.isQuestion = json['isQuestion'] : this.isQuestion = true; 
     json.containsKey('fecha') ? this.fecha = DateTime.parse(json['fecha']) : this.fecha = new DateTime.now(); 
-    json.containsKey('image') ? this.image = json['image'] : this.image = 'none'; 
+    json.containsKey('image') ? this.image = json['image'] : this.image = 'none';
+    json.containsKey('users') ? this.users = json['users'] : this.users = [];
 
-    this.users = [];
-    for(var item in json['users']){
-      final user = new User.fromJsonMap(item);
-      this.users.add(user);
-    }
   }
 
 }

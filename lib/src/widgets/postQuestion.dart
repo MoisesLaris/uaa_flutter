@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:form_validation/enums/enum_apis.dart';
 import 'package:form_validation/src/models/post_model.dart';
+import 'package:form_validation/src/pages/faq/questions/question_detail_page.dart';
 import 'package:intl/intl.dart';
 
 class PostQuestion extends StatelessWidget {
@@ -31,14 +32,14 @@ class PostQuestion extends StatelessWidget {
           controller: _scrollController,
           itemCount: posts.length,
           itemBuilder: (BuildContext context, int index) {
-            return _tarjetaPost(posts[index]);
+            return _tarjetaPost(posts[index], context);
           },
         ),
       ),
     );
   }
 
-  Widget _tarjetaPost(Post post) {
+  Widget _tarjetaPost(Post post, BuildContext context) {
     String fechaFormateada = DateFormat('dd/MM/yyyy').format(post.fecha);
     return FadeIn(
       child: Card(
@@ -47,7 +48,7 @@ class PostQuestion extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: ListTile(
           leading: CircleAvatar(
-              backgroundImage: NetworkImage(ApisEnum.url + ApisEnum.getImage + post.image),
+              backgroundImage: NetworkImage(ApisEnum.url + ApisEnum.getImage + post.idUser.image),
               radius: 22.0,
             ),
           title: Text(post.titulo, overflow: TextOverflow.ellipsis, maxLines: 2,),
@@ -61,9 +62,12 @@ class PostQuestion extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    GestureDetector(child: Icon(Icons.star_border, color: Colors.amber[600],),onTap: (){
-                      print('star tap');
-                    },),
+                    Row(
+                      children: <Widget>[
+                        Icon(Icons.star, color: Colors.yellow[700],),
+                        Text(post.users.length.toString())
+                      ],
+                    ),
                     Row( mainAxisAlignment: MainAxisAlignment.spaceAround,children: <Widget>[Icon(Icons.comment, size: 20.0, color: Colors.blue,), Text('4')],),
                     Text(fechaFormateada , style: TextStyle(color:Colors.grey),),
                   ],
@@ -73,13 +77,20 @@ class PostQuestion extends StatelessWidget {
           ),
           
           onTap: () => {
-            print('targetatap')
+            _navigateToQuestionPage(context, post)
           },
         )
       ),
     );
   }
-  
+  _navigateToQuestionPage(BuildContext context, Post post) async{
+    await Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) {  
+      return QuestionDetailPage(post: post);
+    }));
+    posts.clear();
+    this.siguientePagina(true);
+  }
+
   Future<Null> _getPage1() async{
       posts.clear();
       this.siguientePagina(true);
