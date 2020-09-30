@@ -6,8 +6,8 @@ class ResponseModel{
   ResponseModel({this.success,this.message});
 
   ResponseModel.fromJsonMap(Map<String,dynamic> json) {
-    this.success = json['success'];
-    this.message = json['message'];
-    this.id = json['id'];
+    json.containsKey('success') ? this.success = json['success'] : this.success = false;
+    json.containsKey('message') ? this.message = json['message'] : this.message = '';
+    json.containsKey('id') ? this.id = json['id'] : this.id = '';
   }
 }

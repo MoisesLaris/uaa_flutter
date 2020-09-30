@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:form_validation/enums/enum_apis.dart';
 import 'package:form_validation/src/models/post_model.dart';
 import 'package:form_validation/src/models/response_model.dart';
@@ -31,12 +30,59 @@ class PostProvider extends FatherClass{
     if(reload == true){
       _postPage = 0;
       _cargando = false;
+      postSink(null);
     }
     if(_cargando) return [];
     _cargando = true;
     _postPage++;
 
     Map<String, dynamic> res = await apiProvider.get_api([_postPage.toString()], ApisEnum.getPosts);
+    print(res);
+    if(res.containsKey('pages')){
+      if(_postPage < res['pages']){
+        _cargando = false;
+      }
+      final arrayQuestions = _processPostData(res);
+      _posts.addAll(arrayQuestions);
+      postSink( _posts );
+    }
+    return _processPostData(res);
+  }
+
+  Future<List<Post>> getFavoriteQuestion([bool reload = false]) async {
+    if(reload == true){
+      _postPage = 0;
+      _cargando = false;
+      postSink(null);
+    }
+    if(_cargando) return [];
+    _cargando = true;
+    _postPage++;
+
+    Map<String, dynamic> res = await apiProvider.get_api([_postPage.toString()], ApisEnum.getFavoriteQuestions);
+    print(res);
+    if(res.containsKey('pages')){
+      if(_postPage < res['pages']){
+        _cargando = false;
+      }
+      final arrayQuestions = _processPostData(res);
+      _posts.addAll(arrayQuestions);
+      postSink( _posts );
+    }
+    return _processPostData(res);
+  }
+
+   Future<List<Post>> getMyQuestions([bool reload = false]) async {
+    if(reload == true){
+      _postPage = 0;
+      _cargando = false;
+      postSink(null);
+    }
+    if(_cargando) return [];
+    _cargando = true;
+    _postPage++;
+
+    Map<String, dynamic> res = await apiProvider.get_api([_postPage.toString()], ApisEnum.getMyQuestions);
     print(res);
     if(res.containsKey('pages')){
       if(_postPage < res['pages']){

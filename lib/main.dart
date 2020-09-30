@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
           //User pages
           'newFaq': (BuildContext context) => NewFAQ(),
           //Quiestion pages
-          'questions': (BuildContext context) => QuestionControlPage()
+          'questions': (BuildContext context) => QuestionControlPage(ModalRoute.of(context).settings.arguments)
         },
       ),
     );

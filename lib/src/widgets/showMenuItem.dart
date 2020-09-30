@@ -45,7 +45,11 @@ class ShowMenuItemWidget extends StatelessWidget {
         )
       ),
       onPressed: (){
-        Navigator.pushNamed(context, this.itemMenu.route);
+        if(this.itemMenu.arguments != null){
+          Navigator.pushNamed(context, this.itemMenu.route, arguments: this.itemMenu.arguments);
+        }else{
+          Navigator.pushNamed(context, this.itemMenu.route);
+        }
       },
       color: Colors.white,
       

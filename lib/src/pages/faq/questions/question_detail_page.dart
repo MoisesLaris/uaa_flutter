@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:form_validation/enums/enum_apis.dart';
 import 'package:form_validation/src/models/post_model.dart';
 import 'package:form_validation/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:form_validation/src/providers/publicacion_provider.dart';
+import 'package:form_validation/src/widgets/commentsWidget.dart';
 import 'package:form_validation/src/widgets/userCard.dart';
 import 'package:like_button/like_button.dart';
-import 'package:intl/intl.dart';
 
 
 class QuestionDetailPage extends StatefulWidget {
@@ -44,16 +43,17 @@ class _QuestionDetailPageState extends State<QuestionDetailPage> {
       ),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
-        child: _crearPost(),
+        child: _crearPost(context),
       )
     );
   }
 
-  Widget _crearPost(){
+  Widget _crearPost(BuildContext context){
     return Container(
       margin: EdgeInsets.all(10.0),
       width: double.infinity,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
@@ -70,7 +70,23 @@ class _QuestionDetailPageState extends State<QuestionDetailPage> {
           SizedBox(height: 10.0,),
           Text(this.widget.post.mensaje, style: TextStyle(fontSize: 16.0),),
           // CommentSection()
-
+          SizedBox(height: 10.0,),
+          Text('Comentarios', style: TextStyle(color: Colors.blueAccent, fontSize: 16.0),), 
+          SizedBox(height: 10.0,),
+          Container(
+            width: double.infinity,
+            child: FlatButton(
+              onPressed: (){
+                navigateToComments(context);
+              },
+              child: Text('Ver comentarios', style: TextStyle(fontSize: 16.0, color: Colors.white),),
+              color: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                side: BorderSide(color: Colors.blue),
+            ),
+            ),
+          )
         ],
       ),
     );
@@ -107,6 +123,10 @@ class _QuestionDetailPageState extends State<QuestionDetailPage> {
       },
       isLiked: like,
     );
+  }
+
+  navigateToComments(BuildContext context) async {
+    await Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) {  return CommentWidget(idPost: this.widget.post.id );}));
   }
 
 }
