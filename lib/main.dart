@@ -3,6 +3,7 @@ import 'package:form_validation/src/bloc/provider.dart';
 import 'package:form_validation/src/pages/faq/questions/questions_control_page.dart';
 import 'package:form_validation/src/pages/home_page.dart';
 import 'package:form_validation/src/pages/auth_pages/login_page.dart';
+import 'package:form_validation/src/pages/menu/admin_pages/post/post_control_page.dart';
 import 'package:form_validation/src/pages/menu/admin_pages/postType/postType_control_page.dart';
 import 'package:form_validation/src/pages/menu/admin_pages/users/user_page.dart';
 import 'package:form_validation/src/pages/auth_pages/registro_page.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
           //Admin pages
           'users': (BuildContext context) => UserPage(),
           'postType': (BuildContext context) => PostTypeControl(),
+          'post': (BuildContext context) => PostControlPage(),
           //User pages
           'newFaq': (BuildContext context) => NewFAQ(),
           //Quiestion pages
