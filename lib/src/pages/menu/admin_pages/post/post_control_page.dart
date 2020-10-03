@@ -16,7 +16,7 @@ class _PostControlPageState extends State<PostControlPage> {
 
   @override
   void initState() {
-    this.futurePost = this.postProvider.getPost();
+    this.futurePost = this.postProvider.getPostAdmin();
     super.initState();
   }
   @override
@@ -65,7 +65,6 @@ class _PostControlPageState extends State<PostControlPage> {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             child: ListTile(
               title: Text(listaPublicaciones[index].titulo),
-              subtitle: Text(listaPublicaciones[index].mensaje),
               onTap: () => navigateToEditNewPage(context, false, listaPublicaciones[index])
             ),
           ),
@@ -82,7 +81,7 @@ class _PostControlPageState extends State<PostControlPage> {
         return PostNewEdit(post: post);
     }));
       setState(() {
-        futurePost = postProvider.getPost(true);
+        futurePost = postProvider.getPostAdmin(true);
       });
   }
 

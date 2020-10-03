@@ -1,3 +1,4 @@
+import 'package:form_validation/src/models/postType_model.dart';
 import 'package:form_validation/src/models/user_model.dart';
 
 class Posts{
@@ -20,7 +21,7 @@ class Post {
   String titulo;
   String mensaje;
   User idUser;
-  String tipoPublicacion;
+  PostType tipoPublicacion;
   List<dynamic> users;
   String comentarios;
   bool isQuestion;
@@ -46,7 +47,7 @@ class Post {
     this.titulo = '';
     this.mensaje = '';
     this.idUser = new User.empty();
-    this.tipoPublicacion = '';
+    this.tipoPublicacion = PostType.empty();
     this.users = [];
     this.comentarios = '';
     this.isQuestion = false;
@@ -59,7 +60,7 @@ class Post {
     json.containsKey('titulo') ? this.titulo = json['titulo'] : this.titulo = ''; 
     json.containsKey('mensaje') ? this.mensaje = json['mensaje'] : this.mensaje = ''; 
     json.containsKey('idUser') ? this.idUser = User.fromJsonMap(json['idUser']) : this.idUser = new User.empty(); 
-    json.containsKey('tipoPublicacion') ? this.tipoPublicacion = json['tipoPublicacion'] : this.tipoPublicacion = ''; 
+    json.containsKey('tipoPublicacion') ?  json['tipoPublicacion'] != null ? this.tipoPublicacion = PostType.fromJsonMap(json['tipoPublicacion']) : this.tipoPublicacion = PostType.empty() : this.tipoPublicacion = PostType.empty(); 
     //json.containsKey('comentarios') ? this.comentarios = json['comentarios'] : this.comentarios = ''; 
     json.containsKey('isQuestion') ? this.isQuestion = json['isQuestion'] : this.isQuestion = true; 
     json.containsKey('fecha') ? this.fecha = DateTime.parse(json['fecha']) : this.fecha = new DateTime.now(); 
