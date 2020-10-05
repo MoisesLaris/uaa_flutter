@@ -22,7 +22,7 @@ class PostProvider extends FatherClass{
   bool _cargando = false;
 
 
-  List<Post> _posts = new List();
+  List<Post> _posts = new List<Post>();
   final _postStreamController = StreamController<List<Post>>.broadcast();
 
   Function(List<Post>) get postSink => _postStreamController.sink.add;
@@ -168,6 +168,7 @@ class PostProvider extends FatherClass{
 
   Future<List<Post>> getPostAdmin([bool reload = false]) async{
     if(reload == true){
+      _posts.clear();
       _postPage = 0;
       _cargando = false;
       postSink(null);

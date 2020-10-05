@@ -89,6 +89,8 @@ class _PostNewEditState extends State<PostNewEdit> {
           IconButton(icon: Icon(this.widget.newPost ? Icons.save : Icons.edit), onPressed: () {
             this._saveDocument(context);
           }),
+          this.widget.newPost ? 
+          Container() : 
           IconButton(icon: Icon(Icons.delete), onPressed:() async {
             final res = await showDialog(
               context: context,
@@ -101,10 +103,10 @@ class _PostNewEditState extends State<PostNewEdit> {
                       children: <Widget>[
                         Icon(Icons.delete, size: 35.0, color: Colors.red,),
                         SizedBox(width: 5.0,),
-                        Expanded(child: Text('¿Quiéres eliminar este tipo publicación?'))
+                        Expanded(child: Text('¿Quiéres eliminar esta publicación?'))
                       ],
                     ),
-                    content: Text('Esta acción eliminará este tipo publicación permanentemente'),
+                    content: Text('Esta acción eliminará esta publicación permanentemente'),
                     actions: <Widget>[
                       FlatButton(
                         child: Text('Cancelar'),
@@ -129,38 +131,27 @@ class _PostNewEditState extends State<PostNewEdit> {
         ] : []
       ),
       body: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              !this.widget.onlyView ? Expanded(child: _inputTitle(), flex: 3,) : Expanded(child: Text(this.widget.post.titulo), flex: 3),
-              VerticalDivider(),
-              !this.widget.onlyView ? Expanded(child: _selectType(context), flex: 2,) : Expanded(child: _likeButton(), flex: 2)
-            ],
-          ),
-          this.widget.onlyView ?
-          Container(
-            width: double.infinity,
-            child: FlatButton(
-              onPressed: (){
-                navigateToComments(context);
-              },
-              child: Text('Ver comentarios', style: TextStyle(color: Colors.white),),
-              color: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                side: BorderSide(color: Colors.blue),
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  !this.widget.onlyView ? Expanded(child: _inputTitle(), flex: 3,) : Expanded(child: Text(this.widget.post.titulo, style: TextStyle(fontSize: 17.0)), flex: 3),
+                  VerticalDivider(),
+                  !this.widget.onlyView ? Expanded(child: _selectType(context), flex: 2,) : _likeButton()
+                ],
               ),
             ),
-          ) : Container(),
-          Divider(thickness: 1.0,),
-          Expanded(child: _form()),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.edit),
+            Divider(thickness: 1.0, height: 1.0,),
+            Expanded(child: _form()),
+          ],
+        ),
+      floatingActionButton: FloatingActionButton.extended(
+        label: Text('Comentarios'),
+        icon: Icon(Icons.comment),  
         onPressed: (){
-          _saveDocument(context);
+          navigateToComments(context);
         }
       ),
     ) 
@@ -171,7 +162,7 @@ class _PostNewEditState extends State<PostNewEdit> {
     return ZefyrScaffold(
         child: ZefyrEditor(
           physics: BouncingScrollPhysics(),
-          padding: EdgeInsets.all(10),
+          padding: EdgeInsets.all(10.0),
           controller: _controller,
           focusNode: _focusNode,
           imageDelegate: MyAppZefyrImageDelegate(postProvider),
@@ -213,11 +204,11 @@ class _PostNewEditState extends State<PostNewEdit> {
   }
 
   void _saveDocument(BuildContext context) async{ //Aqui se va a mandar llamar la api
-    if(_myController.text.isEmpty || this.postTypeSelected == null){
+    if(_myController.text.isEmpty || this.postTypeSelected == null || _callInProgress){
       return;
     }
     setState(() {
-
+      _callInProgress = true;
     });
     String contents = jsonEncode(_controller.document);
     ResponseModel respuesta;
@@ -226,7 +217,11 @@ class _PostNewEditState extends State<PostNewEdit> {
     }else{
       respuesta = await postProvider.newPost(_myController.text, contents, false, postTypeSelected);
     }
-    print(respuesta.message);
+    setState(() {
+      _callInProgress = false;
+      FlushbarFeedback.flushbar_feedback(context, respuesta.message, ' ', respuesta.success);
+    });
+
   }
 
 

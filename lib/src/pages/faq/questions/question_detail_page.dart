@@ -44,7 +44,14 @@ class _QuestionDetailPageState extends State<QuestionDetailPage> {
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         child: _crearPost(context),
-      )
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        label: Text('Comentarios'),
+        icon: Icon(Icons.comment),  
+        onPressed: (){
+          navigateToComments(context);
+        }
+      ),
     );
   }
 
@@ -69,24 +76,8 @@ class _QuestionDetailPageState extends State<QuestionDetailPage> {
           Text('Descripción', style: TextStyle(color: Colors.blueAccent, fontSize: 16.0),), 
           SizedBox(height: 10.0,),
           Text(this.widget.post.mensaje, style: TextStyle(fontSize: 16.0),),
-          // CommentSection()
-          SizedBox(height: 10.0,),
-          Text('Comentarios', style: TextStyle(color: Colors.blueAccent, fontSize: 16.0),), 
-          SizedBox(height: 10.0,),
-          Container(
-            width: double.infinity,
-            child: FlatButton(
-              onPressed: (){
-                navigateToComments(context);
-              },
-              child: Text('Ver comentarios', style: TextStyle(fontSize: 16.0, color: Colors.white),),
-              color: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                side: BorderSide(color: Colors.blue),
-            ),
-            ),
-          )
+
+
         ],
       ),
     );

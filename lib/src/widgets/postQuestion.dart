@@ -68,7 +68,7 @@ class PostQuestion extends StatelessWidget {
                         Text(post.users.length.toString())
                       ],
                     ),
-                    Row( mainAxisAlignment: MainAxisAlignment.spaceAround,children: <Widget>[Icon(Icons.comment, size: 20.0, color: Colors.blue,), Text('4')],),
+                    // Row( mainAxisAlignment: MainAxisAlignment.spaceAround,children: <Widget>[Icon(Icons.comment, size: 20.0, color: Colors.blue,), Text('4')],),
                     Text(fechaFormateada , style: TextStyle(color:Colors.grey),),
                   ],
                 ),
