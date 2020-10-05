@@ -203,5 +203,13 @@ class PostProvider extends FatherClass{
     return this.reponseModelPostApi(res);
   }
 
+  Future<ResponseModel> deletePost(dynamic id) async{
+    final auth_data = {
+      'id': id
+    };
+    Map<String, dynamic> res = await apiProvider.post_api(auth_data, ApisEnum.deletePost); 
+    return this.reponseModelPostApi(res);
+  }
+
 
 }

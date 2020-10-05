@@ -3,8 +3,12 @@ import 'package:form_validation/src/models/postType_model.dart';
 import 'package:form_validation/src/models/post_model.dart';
 import 'package:form_validation/src/models/response_model.dart';
 import 'package:form_validation/src/pages/menu/admin_pages/post/zefyr_image_delegate.dart';
+import 'package:form_validation/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:form_validation/src/providers/publicacion_provider.dart';
 import 'package:form_validation/src/providers/tipoPublicacion_provider.dart';
+import 'package:form_validation/src/widgets/commentsWidget.dart';
+import 'package:form_validation/src/widgets/flushbar_feedback.dart';
+import 'package:like_button/like_button.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:quill_delta/quill_delta.dart';
 import 'dart:convert';
@@ -13,10 +17,15 @@ import 'package:zefyr/zefyr.dart';
 class PostNewEdit extends StatefulWidget {
   Post post;
   bool newPost = false;
+  bool onlyView = false;
   PostNewEdit({@required this.post});
   PostNewEdit.newPost(){
     this.post = new Post.empty();
     this.newPost = true;
+  }
+  PostNewEdit.onlyView(Post post){
+    this.post = post;
+    this.onlyView = true;
   }
   @override
   _PostNewEditState createState() => _PostNewEditState();
@@ -28,15 +37,17 @@ class _PostNewEditState extends State<PostNewEdit> {
   //Providers
   final PostProvider postProvider = new PostProvider();
   final PostTypeProvider postTypeProvider = new PostTypeProvider();
+  final prefs = PreferenciasUsuario();
   
   //Futures y listas -> Dropdown
   Future<List<PostType>> futurePostTypeList;
   List<PostType> postTypeList;
   PostType postTypeSelected = null;
-
+  
+  //Boolean
   final _myController = TextEditingController();
   bool _callInProgress = false;
-  
+  bool like = false;
 
   @override
   void initState() {
@@ -46,6 +57,13 @@ class _PostNewEditState extends State<PostNewEdit> {
     _controller = ZefyrController(document);
     _focusNode = FocusNode();
     _myController.text = this.widget.post.titulo;
+    like = false;
+    for(final user in this.widget.post.users){
+      if(prefs.idUser == user){
+        like = true;
+        break;
+      }
+    };
   }
 
   @override
@@ -67,11 +85,10 @@ class _PostNewEditState extends State<PostNewEdit> {
       appBar: AppBar(
         title: Text('Publicación'),
         centerTitle: true,
-        actions: <Widget>[
-          this.widget.newPost ? 
-          IconButton(icon: Icon(Icons.save), onPressed: () {
+        actions: !this.widget.onlyView  ? <Widget>[
+          IconButton(icon: Icon(this.widget.newPost ? Icons.save : Icons.edit), onPressed: () {
             this._saveDocument(context);
-          }) :
+          }),
           IconButton(icon: Icon(Icons.delete), onPressed:() async {
             final res = await showDialog(
               context: context,
@@ -109,18 +126,33 @@ class _PostNewEditState extends State<PostNewEdit> {
                 _deletePostType(this.widget.post.id, context);
               }
           }),
-        ]
+        ] : []
       ),
       body: Column(
         children: <Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Expanded(child: _inputTitle(), flex: 3,),
+              !this.widget.onlyView ? Expanded(child: _inputTitle(), flex: 3,) : Expanded(child: Text(this.widget.post.titulo), flex: 3),
               VerticalDivider(),
-              Expanded(child: _selectType(context), flex: 2,)
+              !this.widget.onlyView ? Expanded(child: _selectType(context), flex: 2,) : Expanded(child: _likeButton(), flex: 2)
             ],
           ),
+          this.widget.onlyView ?
+          Container(
+            width: double.infinity,
+            child: FlatButton(
+              onPressed: (){
+                navigateToComments(context);
+              },
+              child: Text('Ver comentarios', style: TextStyle(color: Colors.white),),
+              color: Colors.blue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                side: BorderSide(color: Colors.blue),
+              ),
+            ),
+          ) : Container(),
           Divider(thickness: 1.0,),
           Expanded(child: _form()),
         ],
@@ -143,7 +175,7 @@ class _PostNewEditState extends State<PostNewEdit> {
           controller: _controller,
           focusNode: _focusNode,
           imageDelegate: MyAppZefyrImageDelegate(postProvider),
-          mode: ZefyrMode.edit,
+          mode: this.widget.onlyView ? ZefyrMode.select : ZefyrMode.edit,
           autofocus: false,
         ),
       );
@@ -155,13 +187,15 @@ class _PostNewEditState extends State<PostNewEdit> {
     setState(() {
       _callInProgress = true;
     });
-    // ResponseModel res = await this._postProvider.deletePostType(id);
-    // if(res.success){
-
-    //   Navigator.popUntil(context, ModalRoute.withName('postType'));
-    // }else{
-
-    // }
+    ResponseModel res = await this.postProvider.deletePost(id);
+    if(res.success){
+      Navigator.popUntil(context, ModalRoute.withName('post'));
+    }else{
+      setState(() {
+        _callInProgress = false;
+        FlushbarFeedback.flushbar_feedback(context, res.message, ' ', false);
+      });
+    }
   }
 
   NotusDocument _loadDocument() {
@@ -277,6 +311,43 @@ class _PostNewEditState extends State<PostNewEdit> {
     return dropdown;
 
     
+  }
+  
+  Widget _likeButton(){
+    return LikeButton(
+      size: 35.0,
+      circleColor:
+          CircleColor(start: Color(0xff00ddff), end: Color(0xff0099cc)),
+      bubblesColor: BubblesColor(
+        dotPrimaryColor: Colors.yellow[700],
+        dotSecondaryColor: Colors.blueAccent,
+      ),
+      likeBuilder: (like) {
+        return Icon(
+          Icons.star,
+          color: like ? Colors.yellow[700] : Colors.grey,
+          size: 35.0,
+        );
+      },
+      likeCount: this.widget.post.users.length,
+      countBuilder: (int count, bool isLiked, String text) {
+        var color = Colors.grey;
+        Widget result;
+        result = Text(
+          text,
+          style: TextStyle(color: color),
+        );
+        return result;
+      },
+      onTap: (like){
+        return postProvider.likePost(this.widget.post.id);
+      },
+      isLiked: like,
+    );
+  }
+
+  navigateToComments(BuildContext context) async {
+    await Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) {  return CommentWidget(idPost: this.widget.post.id );}));
   }
 
 }
