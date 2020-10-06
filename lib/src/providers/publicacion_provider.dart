@@ -166,7 +166,7 @@ class PostProvider extends FatherClass{
 
   //Publicaciones como admin
 
-  Future<List<Post>> getPostAdmin([bool reload = false]) async{
+  Future<List<Post>> getPostAdmin([bool reload = false, int sort = 1]) async{
     if(reload == true){
       _posts.clear();
       _postPage = 0;
@@ -176,8 +176,18 @@ class PostProvider extends FatherClass{
     if(_cargando) return [];
     _cargando = true;
     _postPage++;
-
-    Map<String, dynamic> res = await apiProvider.get_api([_postPage.toString()], ApisEnum.getPostAdmin);
+    Map<String, dynamic> res;
+    switch (sort) {
+      case 1:
+        res = await apiProvider.get_api([_postPage.toString()], ApisEnum.getPostAdmin); 
+        break;
+      case 2:
+        res = await apiProvider.get_api([_postPage.toString()], ApisEnum.getPostAdminAcending); 
+        break;
+      default:
+        res = await apiProvider.get_api([_postPage.toString()], ApisEnum.getPostAdminFavorites); 
+        break;
+    }
     print(res);
     if(res.containsKey('pages')){
       if(_postPage < res['pages']){

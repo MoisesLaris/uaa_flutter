@@ -1,3 +1,4 @@
+
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -9,7 +10,6 @@ import 'package:intl/intl.dart';
 
 class PostControlPage extends StatefulWidget {
   bool isAdmin;
-
   PostControlPage(bool isAdmin){
     this.isAdmin = isAdmin;
   }
@@ -21,10 +21,12 @@ class _PostControlPageState extends State<PostControlPage> {
   final postProvider = PostProvider();
   ScrollController _scrollController;
   bool _isLoading = false;
+  int filtros = 1;
+
 
   @override
   void initState() {
-    this.postProvider.getPostAdmin();
+    this.postProvider.getPostAdmin(false,filtros);
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
     super.initState();
@@ -36,7 +38,7 @@ class _PostControlPageState extends State<PostControlPage> {
           setState(() {
             _isLoading = true;
           });
-          await postProvider.getPostAdmin();
+          await postProvider.getPostAdmin(false,filtros);
           setState(() {
             _isLoading = false;
           });
@@ -84,19 +86,37 @@ class _PostControlPageState extends State<PostControlPage> {
               child: Icon(Icons.star),
               backgroundColor: Colors.yellow[700],
               label: 'Favoritos',
-              onTap: () => print('FIRST CHILD')
+              onTap: () {
+                filtros = 3;
+                postProvider.getPostAdmin(true,filtros);
+                setState(() {
+                  
+                });
+              }
             ),
             SpeedDialChild(
               child: Icon(Icons.calendar_today),
               backgroundColor: Colors.blue,
               label: 'Más recientes',
-              onTap: () => print('SECOND CHILD'),
+              onTap: () {
+                filtros = 1;
+                postProvider.getPostAdmin(true,filtros);
+                setState(() {
+                  
+                });
+              }
             ),
             SpeedDialChild(
               child: Icon(Icons.timer),
               backgroundColor: Colors.green,
               label: 'Primeras publicaciones',
-              onTap: () => print('THIRD CHILD'),
+              onTap: () {
+                filtros = 2;
+                postProvider.getPostAdmin(true,filtros);
+                setState(() {
+                  
+                });
+              }
             ),
           ],
         ),
@@ -131,7 +151,7 @@ class _PostControlPageState extends State<PostControlPage> {
   Widget _crearCards(BuildContext context, List<Post> listaPublicaciones){
     return RefreshIndicator(
       onRefresh: (){
-          return postProvider.getPostAdmin(true);
+          return postProvider.getPostAdmin(true, filtros);
         },
       child: ListView.builder(
         physics: BouncingScrollPhysics(),
@@ -193,7 +213,7 @@ class _PostControlPageState extends State<PostControlPage> {
       
     }));
       setState(() {
-        postProvider.getPostAdmin(true);
+        postProvider.getPostAdmin(true, filtros);
       });
   }
 
