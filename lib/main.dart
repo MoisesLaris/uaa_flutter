@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
           //Admin pages
           'users': (BuildContext context) => UserPage(),
           'postType': (BuildContext context) => PostTypeControl(),
-          'post': (BuildContext context) => PostControlPage(),
+          'post': (BuildContext context) => PostControlPage(ModalRoute.of(context).settings.arguments),
           //User pages
           'newFaq': (BuildContext context) => NewFAQ(),
           //Quiestion pages

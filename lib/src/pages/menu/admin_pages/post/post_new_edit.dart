@@ -90,6 +90,11 @@ class _PostNewEditState extends State<PostNewEdit> {
             this._saveDocument(context);
           }),
           this.widget.newPost ? 
+          Container() :
+          IconButton(icon: Icon(Icons.comment), onPressed: () {
+            this.navigateToComments(context);
+          }),
+          this.widget.newPost ? 
           Container() : 
           IconButton(icon: Icon(Icons.delete), onPressed:() async {
             final res = await showDialog(
@@ -147,13 +152,13 @@ class _PostNewEditState extends State<PostNewEdit> {
             Expanded(child: _form()),
           ],
         ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: this.widget.onlyView ? FloatingActionButton.extended(
         label: Text('Comentarios'),
         icon: Icon(Icons.comment),  
         onPressed: (){
           navigateToComments(context);
         }
-      ),
+      ) : Container(),
     ) 
   );
   }

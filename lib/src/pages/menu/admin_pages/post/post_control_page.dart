@@ -1,4 +1,6 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:form_validation/src/models/post_model.dart';
 import 'package:form_validation/src/pages/menu/admin_pages/post/post_new_edit.dart';
 import 'package:form_validation/src/providers/publicacion_provider.dart';
@@ -6,15 +8,17 @@ import 'package:intl/intl.dart';
 
 
 class PostControlPage extends StatefulWidget {
+  bool isAdmin;
+
+  PostControlPage(bool isAdmin){
+    this.isAdmin = isAdmin;
+  }
   @override
   _PostControlPageState createState() => _PostControlPageState();
 }
 
 class _PostControlPageState extends State<PostControlPage> {
-
   final postProvider = PostProvider();
-  Future<List<Post>> futurePost;
-  List<Post> listaPublicaciones;
   ScrollController _scrollController;
   bool _isLoading = false;
 
@@ -45,13 +49,57 @@ class _PostControlPageState extends State<PostControlPage> {
       appBar: AppBar(
         title: Text('Publicaciones'),
         centerTitle: true,
-        actions: <Widget>[
+        actions: this.widget.isAdmin ?  <Widget>[
           IconButton(icon: Icon(Icons.note_add), onPressed:() =>
             navigateToEditNewPage(context, true)
           )
-        ]
+        ] : []
       ),
       body: _futurePosts(context),
+      floatingActionButton: SpeedDial(
+          // both default to 16
+          marginRight: 18,
+          marginBottom: 20,
+          animatedIcon: AnimatedIcons.menu_close,
+          animatedIconTheme: IconThemeData(size: 22.0),
+          // this is ignored if animatedIcon is non null
+          // child: Icon(Icons.add),
+          visible: true,
+          // If true user is forced to close dial manually 
+          // by tapping main button and overlay is not rendered.
+          closeManually: false,
+          tooltip: 'Filtrar',
+          curve: Curves.bounceIn,
+          overlayColor: Colors.black,
+          overlayOpacity: 0.5,
+          onOpen: () => print('OPENING DIAL'),
+          onClose: () => print('DIAL CLOSED'),
+          heroTag: 'speed-dial-hero-tag',
+          backgroundColor: Colors.blue,
+          foregroundColor: Colors.white,
+          elevation: 8.0,
+          shape: CircleBorder(),
+          children: [
+            SpeedDialChild(
+              child: Icon(Icons.star),
+              backgroundColor: Colors.yellow[700],
+              label: 'Favoritos',
+              onTap: () => print('FIRST CHILD')
+            ),
+            SpeedDialChild(
+              child: Icon(Icons.calendar_today),
+              backgroundColor: Colors.blue,
+              label: 'Más recientes',
+              onTap: () => print('SECOND CHILD'),
+            ),
+            SpeedDialChild(
+              child: Icon(Icons.timer),
+              backgroundColor: Colors.green,
+              label: 'Primeras publicaciones',
+              onTap: () => print('THIRD CHILD'),
+            ),
+          ],
+        ),
     );
   }
 
@@ -63,7 +111,7 @@ class _PostControlPageState extends State<PostControlPage> {
         if(snapshot.connectionState == ConnectionState.active){
           if(snapshot.hasData){
             if(snapshot.data.length > 0){
-              return Stack(children: <Widget>[ _crearCards(context, snapshot.data), _crearLoading()]);
+              return Stack(children: <Widget>[ FadeIn(child: _crearCards(context, snapshot.data)), _crearLoading()]);
             }else{
               return Padding(
                 padding: const EdgeInsets.all(10.0),
@@ -134,13 +182,18 @@ class _PostControlPageState extends State<PostControlPage> {
 
   navigateToEditNewPage(BuildContext context, bool isNewPost, [Post post]) async {
     await Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) {  
-      if(isNewPost) 
-        return PostNewEdit.newPost();
-      else
-        return PostNewEdit(post: post);
+      if(this.widget.isAdmin){
+        if(isNewPost) 
+          return PostNewEdit.newPost();
+        else
+          return PostNewEdit(post: post);
+      }else{
+        return PostNewEdit.onlyView(post);
+      }
+      
     }));
       setState(() {
-        futurePost = postProvider.getPostAdmin(true);
+        postProvider.getPostAdmin(true);
       });
   }
 
