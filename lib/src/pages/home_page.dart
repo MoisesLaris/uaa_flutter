@@ -59,7 +59,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _callPage(int paginaActual) {
-    print(_currentIndex);
     switch(paginaActual){
       case 0: return MenuPage();
       case 1: return FaqPage();

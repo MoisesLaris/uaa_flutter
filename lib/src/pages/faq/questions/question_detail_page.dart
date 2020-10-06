@@ -71,6 +71,8 @@ class _QuestionDetailPageState extends State<QuestionDetailPage> {
             ],
           ),
           SizedBox(height: 20.0,),
+          Text('Usuario', style: TextStyle(color: Colors.blueAccent, fontSize: 16.0),), 
+          SizedBox(height: 10.0,),
           UserCard(user: this.widget.post.idUser, fecha: this.widget.post.fecha,),
           SizedBox(height: 20.0,),
           Text('Descripción', style: TextStyle(color: Colors.blueAccent, fontSize: 16.0),), 

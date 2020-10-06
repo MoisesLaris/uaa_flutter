@@ -21,13 +21,6 @@ class _NewFAQState extends State<NewFAQ> {
   
   @override
   Widget build(BuildContext context) {
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     title: Text('¿Tienes una pregunta?'),
-    //     centerTitle: true,
-    //   ),
-    //   body: _form()
-    // );
     return ModalProgressHUD(
       inAsyncCall: _callInProgress,
       opacity: 0.5,      

@@ -29,6 +29,7 @@ class MenuPage extends StatelessWidget {
 
   Widget _crearMenus(BuildContext context) {
     return StaggeredGridView.countBuilder(
+      physics: BouncingScrollPhysics(),
       crossAxisCount: 2,
       crossAxisSpacing: 12.0,
       mainAxisSpacing: 12.0,

@@ -7,7 +7,5 @@ List<MenuItem_Model> faqItems = [
   MenuItem_Model( icon: Icons.add_comment, title: 'Nueva pregunta',color: Colors.blueAccent, route: 'newFaq', isAdmin: false),
   MenuItem_Model( icon: Icons.person, title: 'Mis preguntas',color: Colors.orange, route: 'questions', isAdmin: true, arguments: 'mine'),
   MenuItem_Model( icon: Icons.star, title: 'Favoritas',color: Colors.yellow[600], route: 'questions', isAdmin: true, arguments: 'favorites'),
-  // MenuItem_Model( icon: Icons.feedback, title: 'Preguntas',color: Colors.lightGreen, route: 'hom', isAdmin: true),
-  // MenuItem_Model( icon: Icons.star, title: 'Favoritos',color: Colors.yellow[600], route: 'hom', isAdmin: true),
   
 ];

@@ -19,27 +19,29 @@ class ShowMenuItemWidget extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Material(
-                    color: this.itemMenu.color,
-                    borderRadius: BorderRadius.circular(100.0),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Icon(
-                        this.itemMenu.icon,
-                        color: Colors.white,
-                        size: 30.0,
-                      ),
-                    )
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Text(this.itemMenu.title, overflow: TextOverflow.ellipsis, style: TextStyle(color: this.itemMenu.color, fontSize: 18.0),),
-                )
-              ],
+            Flexible(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Material(
+                      color: this.itemMenu.color,
+                      borderRadius: BorderRadius.circular(100.0),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Icon(
+                          this.itemMenu.icon,
+                          color: Colors.white,
+                          size: 30.0,
+                        ),
+                      )
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(this.itemMenu.title, overflow: TextOverflow.ellipsis, style: TextStyle(color: this.itemMenu.color, fontSize: 18.0),),
+                  )
+                ],
 
+              ),
             ),
           ],
         )

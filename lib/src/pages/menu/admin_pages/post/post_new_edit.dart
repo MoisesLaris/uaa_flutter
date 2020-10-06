@@ -165,16 +165,16 @@ class _PostNewEditState extends State<PostNewEdit> {
 
   Widget _form(){
     return ZefyrScaffold(
-        child: ZefyrEditor(
-          physics: BouncingScrollPhysics(),
-          padding: EdgeInsets.all(10.0),
-          controller: _controller,
-          focusNode: _focusNode,
-          imageDelegate: MyAppZefyrImageDelegate(postProvider),
-          mode: this.widget.onlyView ? ZefyrMode.select : ZefyrMode.edit,
-          autofocus: false,
-        ),
-      );
+      child: ZefyrEditor(
+        physics: BouncingScrollPhysics(),
+        padding: EdgeInsets.all(10.0),
+        controller: _controller,
+        focusNode: _focusNode,
+        imageDelegate: MyAppZefyrImageDelegate(postProvider),
+        mode: this.widget.onlyView ? ZefyrMode.select : ZefyrMode.edit,
+        autofocus: false,
+      ),
+    );
   }
 
 

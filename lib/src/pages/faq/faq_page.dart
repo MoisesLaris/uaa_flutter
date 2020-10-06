@@ -21,6 +21,7 @@ class FaqPage extends StatelessWidget {
 
   Widget _crearMenusPreguntas(BuildContext context){
     return StaggeredGridView.countBuilder(
+      physics: BouncingScrollPhysics(),
       crossAxisCount: 2,
       crossAxisSpacing: 12.0,
       mainAxisSpacing: 12.0,

@@ -36,6 +36,9 @@ class ApisEnum{
   static const getFavoriteQuestions = '/api/publicacion/preguntasFavoritas/?';
   static const getMyQuestions = '/api/publicacion/misPreguntas/?';
 
+  static const searchPost = '/api/publicacion/buscar/?';
+  static const searchQuestion = '/api/publicacion/preguntas/buscar/?';
+
   static const getPostAdmin = '/api/publicacion/publicaciones/?';
   static const getPostAdminAcending = '/api/publicacion/publicacionesAcending/:page?';
   static const getPostAdminFavorites = '/api/publicacion/publicacionesFavoritas/:page?';

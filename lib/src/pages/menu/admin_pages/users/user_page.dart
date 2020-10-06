@@ -80,6 +80,7 @@ class _UserPageState extends State<UserPage> {
         Expanded(
           child: Center(
             child: SingleChildScrollView(
+              physics: BouncingScrollPhysics(),
               scrollDirection: Axis.vertical,
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,

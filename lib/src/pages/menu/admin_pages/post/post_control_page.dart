@@ -1,10 +1,10 @@
-
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:form_validation/src/models/post_model.dart';
 import 'package:form_validation/src/pages/menu/admin_pages/post/post_new_edit.dart';
 import 'package:form_validation/src/providers/publicacion_provider.dart';
+import 'package:form_validation/src/search/search_delegate.dart';
 import 'package:intl/intl.dart';
 
 
@@ -52,10 +52,18 @@ class _PostControlPageState extends State<PostControlPage> {
         title: Text('Publicaciones'),
         centerTitle: true,
         actions: this.widget.isAdmin ?  <Widget>[
+          IconButton(icon: Icon(Icons.search), onPressed:() =>
+            showSearch(context: context, delegate: DataSearch())
+          ),
           IconButton(icon: Icon(Icons.note_add), onPressed:() =>
             navigateToEditNewPage(context, true)
+          ),
+          
+        ] : [
+          IconButton(icon: Icon(Icons.search), onPressed:() =>
+            showSearch(context: context, delegate: DataSearch())
           )
-        ] : []
+        ]
       ),
       body: _futurePosts(context),
       floatingActionButton: SpeedDial(
@@ -83,9 +91,17 @@ class _PostControlPageState extends State<PostControlPage> {
           shape: CircleBorder(),
           children: [
             SpeedDialChild(
+              child: Icon(Icons.search),
+              backgroundColor: Colors.indigo,
+              label: 'Buscar...',
+              onTap: () {
+                showSearch(context: context, delegate: DataSearch());
+              }
+            ),
+            SpeedDialChild(
               child: Icon(Icons.star),
               backgroundColor: Colors.yellow[700],
-              label: 'Favoritos',
+              label: 'Más estrellas',
               onTap: () {
                 filtros = 3;
                 postProvider.getPostAdmin(true,filtros);
@@ -118,6 +134,7 @@ class _PostControlPageState extends State<PostControlPage> {
                 });
               }
             ),
+            
           ],
         ),
     );

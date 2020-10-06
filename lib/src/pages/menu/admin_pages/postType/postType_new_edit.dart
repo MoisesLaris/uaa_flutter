@@ -197,6 +197,7 @@ class _PostTypeNewEditState extends State<PostTypeNewEdit> {
       await pr.show();
       ResponseModel response = await _postTypeProvider.newPostType(this.widget.postType.nombre, this.widget.postType.descripcion);
       await pr.hide();
+      _formKey.currentState.reset();
       FlushbarFeedback.flushbar_feedback(context, response.message, ' ', response.success);
     }else{
       pr.style( message: 'Editando tipo publicación', insetAnimCurve: Curves.easeInOut, );

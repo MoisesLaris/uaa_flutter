@@ -223,4 +223,17 @@ class PostProvider extends FatherClass{
   }
 
 
+  Future<List<Post>> buscarPost(String name) async {
+
+    Map<String, dynamic> res = await apiProvider.get_api([name], ApisEnum.searchPost);
+    return this._processPostData(res);
+  }
+
+  Future<List<Post>> buscarQuestion(String name) async {
+
+    Map<String, dynamic> res = await apiProvider.get_api([name], ApisEnum.searchQuestion);
+    return this._processPostData(res);
+  }
+
+
 }

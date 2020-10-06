@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:form_validation/src/providers/publicacion_provider.dart';
+import 'package:form_validation/src/search/search_delegate.dart';
 import 'package:form_validation/src/widgets/postQuestion.dart';
 
 
@@ -45,6 +46,11 @@ class _QuestionControlPageState extends State<QuestionControlPage> {
       appBar: AppBar(
         title: Text('Preguntas'),
         centerTitle: true,
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.search), onPressed: (){
+            showSearch(context: context, delegate: DataSearch.isQuestion());
+          })
+        ],
       ),
       body: _buildPreguntas(),
     );
