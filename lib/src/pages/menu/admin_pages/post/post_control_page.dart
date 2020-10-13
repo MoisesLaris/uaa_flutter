@@ -5,7 +5,7 @@ import 'package:form_validation/src/models/post_model.dart';
 import 'package:form_validation/src/pages/menu/admin_pages/post/post_new_edit.dart';
 import 'package:form_validation/src/providers/publicacion_provider.dart';
 import 'package:form_validation/src/search/search_delegate.dart';
-import 'package:intl/intl.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 
 class PostControlPage extends StatefulWidget {
@@ -202,7 +202,7 @@ class _PostControlPageState extends State<PostControlPage> {
                             ],
                           ),
                           // Row( mainAxisAlignment: MainAxisAlignment.spaceAround,children: <Widget>[Icon(Icons.comment, size: 20.0, color: Colors.blue,), Text('4')],),
-                          Text(DateFormat('dd/MM/yyyy').format(listaPublicaciones[index].fecha) , style: TextStyle(color:Colors.grey),),
+                          Text(timeago.format(listaPublicaciones[index].fecha) , style: TextStyle(color:Colors.grey),),
                         ],
                       ),
                     ),

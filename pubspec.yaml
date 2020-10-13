@@ -42,6 +42,7 @@ dependencies:
   quill_delta: ^1.0.1
   zefyr: ^0.11.0
   flutter_speed_dial: ^1.2.5
+  timeago: ^2.0.27
 
 dev_dependencies:
   flutter_test:

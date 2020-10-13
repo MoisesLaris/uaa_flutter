@@ -55,6 +55,10 @@ class _PostNewEditState extends State<PostNewEdit> {
     futurePostTypeList = postTypeProvider.getPostTypes();
     final document = _loadDocument();
     _controller = ZefyrController(document);
+    _controller.document.changes.listen((event) {
+      print(_controller.document.toString());
+    });
+            
     _focusNode = FocusNode();
     _myController.text = this.widget.post.titulo;
     like = false;

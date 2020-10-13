@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:form_validation/src/models/post_model.dart';
+import 'package:form_validation/src/models/response_model.dart';
 import 'package:form_validation/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:form_validation/src/providers/publicacion_provider.dart';
 import 'package:form_validation/src/widgets/commentsWidget.dart';
+import 'package:form_validation/src/widgets/flushbar_feedback.dart';
 import 'package:form_validation/src/widgets/userCard.dart';
 import 'package:like_button/like_button.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 
 class QuestionDetailPage extends StatefulWidget {
@@ -21,10 +24,12 @@ class _QuestionDetailPageState extends State<QuestionDetailPage> {
   bool like;
   final postProvider = new PostProvider();
   final prefs = PreferenciasUsuario();
-
+  bool isAdmin = false;
+  bool _callInProgresss = false;
   @override
   void initState() {
     like = false;
+    this.isAdmin = prefs.isAdmin;
     for(final user in this.widget.post.users){
       if(prefs.idUser == user){
         like = true;
@@ -36,10 +41,24 @@ class _QuestionDetailPageState extends State<QuestionDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return ModalProgressHUD(
+      opacity: 0.5,
+      progressIndicator: CircularProgressIndicator(),
+      inAsyncCall: _callInProgresss,
+      dismissible: false,
+      child: Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text('Pregunta'),
+        actions: <Widget>[
+          this.widget.post.idUser.id == prefs.idUser || this.isAdmin ?
+          IconButton(icon: Icon(Icons.delete), onPressed: (){
+            print('borrar post');
+            _deletePostDialog(context);
+          })
+          : Container()
+      
+        ],
       ),
       body: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
@@ -52,6 +71,7 @@ class _QuestionDetailPageState extends State<QuestionDetailPage> {
           navigateToComments(context);
         }
       ),
+      )
     );
   }
 
@@ -120,6 +140,59 @@ class _QuestionDetailPageState extends State<QuestionDetailPage> {
 
   navigateToComments(BuildContext context) async {
     await Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) {  return CommentWidget(idPost: this.widget.post.id );}));
+  }
+
+  _deletePostDialog(BuildContext context) async{
+    final res = await showDialog(
+    context: context,
+    builder: (context){
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0)
+          ),
+          title: Row(
+            children: <Widget>[
+              Icon(Icons.delete, size: 35.0, color: Colors.red,),
+              SizedBox(width: 5.0,),
+              Expanded(child: Text('¿Quiéres eliminar esta pregunta?'))
+            ],
+          ),
+          content: Text('Esta acción eliminará esta pregunta permanentemente'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Cancelar'),
+              onPressed: (){
+                Navigator.pop(context, false);
+              },
+            ),
+            FlatButton(
+              child: Text('Borrar', style: TextStyle(color: Colors.red),),
+              onPressed: (){
+                Navigator.pop(context, true);
+              },
+            )
+          ],
+        );
+      }
+    );
+    if(res == true){
+      setState(() {
+        _callInProgresss = true; 
+        _deletePost(context);
+      });
+    }
+  }
+
+  _deletePost(BuildContext context) async{
+    ResponseModel res = await postProvider.deletePost(this.widget.post.id);
+    if(res.success){
+      Navigator.popUntil(context, ModalRoute.withName('questions'));
+    }else{
+      setState(() {
+        _callInProgresss = false;
+        FlushbarFeedback.flushbar_feedback(context, res.message, ' ', res.success);
+      });
+    }
   }
 
 }

@@ -3,9 +3,7 @@ import 'package:form_validation/src/bloc/provider.dart';
 import 'package:form_validation/src/pages/configuracion/configuration_page.dart';
 import 'package:form_validation/src/pages/faq/faq_page.dart';
 import 'package:form_validation/src/pages/menu/menu_page.dart';
-import 'package:form_validation/src/pages/menu/user_pages/faq/new_faq.dart';
 import 'package:form_validation/src/providers/usuario_provider.dart';
-import 'package:form_validation/src/widgets/flushbar_feedback.dart';
 
 class HomePage extends StatefulWidget {
   @override

@@ -50,5 +50,6 @@ class ApisEnum{
 
   static const getComment = '/api/comentarios/idPost/?/page/?';
   static const newComment = '/api/comentarios/newComentario';
+  static const deleteComment = '/api/comentarios/deleteComentario';
 
 }

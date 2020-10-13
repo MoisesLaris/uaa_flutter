@@ -73,5 +73,18 @@ class CommentProvider extends FatherClass{
     commentSink(_comments);  
   }
 
+  void pullComment(int index){
+    _comments.removeAt(index);
+    commentSink(_comments); 
+  }
+
+  Future<ResponseModel> deleteComment(Comment comment) async{
+    final obj = {
+      'id': comment.id
+    };
+    Map<String, dynamic> res = await apiProvider.post_api(obj, ApisEnum.deleteComment);
+    return this.reponseModelPostApi(res);
+  }
+
   
 }

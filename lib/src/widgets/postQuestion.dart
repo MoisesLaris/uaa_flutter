@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:form_validation/enums/enum_apis.dart';
 import 'package:form_validation/src/models/post_model.dart';
 import 'package:form_validation/src/pages/faq/questions/question_detail_page.dart';
-import 'package:intl/intl.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class PostQuestion extends StatelessWidget {
 
@@ -40,7 +40,7 @@ class PostQuestion extends StatelessWidget {
   }
 
   Widget _tarjetaPost(Post post, BuildContext context) {
-    String fechaFormateada = DateFormat('dd/MM/yyyy').format(post.fecha);
+
     return FadeIn(
       child: Card(
         elevation: 10,
@@ -69,7 +69,7 @@ class PostQuestion extends StatelessWidget {
                       ],
                     ),
                     // Row( mainAxisAlignment: MainAxisAlignment.spaceAround,children: <Widget>[Icon(Icons.comment, size: 20.0, color: Colors.blue,), Text('4')],),
-                    Text(fechaFormateada , style: TextStyle(color:Colors.grey),),
+                    Text(timeago.format(post.fecha) , style: TextStyle(color:Colors.grey),),
                   ],
                 ),
               ),
