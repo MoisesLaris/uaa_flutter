@@ -66,7 +66,7 @@ class PreferenciasUsuario{
   }
 
   get image{
-    return _prefs.getString('image') ?? '';
+    return _prefs.getString('image') ?? 'none';
   }
 
   set image(String value){

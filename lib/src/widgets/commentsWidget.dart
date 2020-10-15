@@ -130,7 +130,7 @@ class _CommentWidgetState extends State<CommentWidget> {
               ),
               title: Text(comentarios[index].comentario),
               subtitle: Text(timeago.format(comentarios[index].fecha)),
-              trailing: this.isAdmin ? IconButton(icon: Icon(Icons.delete), onPressed: () => _deleteCommentDialog(comentarios[index], index, context)) : Container(),
+              trailing: this.isAdmin ? IconButton(icon: Icon(Icons.delete), onPressed: () => _deleteCommentDialog(comentarios[index], index, context)) : Icon(Icons.visibility),
             ),
           );
         },
