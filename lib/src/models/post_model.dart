@@ -9,8 +9,8 @@ class Posts{
   Posts.fromJsonList(List<dynamic> jsonList){
     if(jsonList == null) return;
     for(var item in jsonList){
-      final user = new Post.fromJsonMap(item);
-      items.add( user );
+      final post = new Post.fromJsonMap(item);
+      items.add( post );
     }
   }
 }

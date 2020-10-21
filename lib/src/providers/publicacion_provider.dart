@@ -56,6 +56,29 @@ class PostProvider extends FatherClass{
     return _processPostData(res);
   }
 
+  Future<List<Post>> getPostAdminByTypePost([bool reload = false]) async {
+    if(reload == true){
+      _postPage = 0;
+      _cargando = false;
+      postSink(null);
+    }
+    if(_cargando) return [];
+    _cargando = true;
+    _postPage++;
+
+    Map<String, dynamic> res = await apiProvider.get_api([_postPage.toString()], ApisEnum.getPostAdminTypePost);
+    print(res);
+    if(res.containsKey('pages')){
+      if(_postPage < res['pages']){
+        _cargando = false;
+      }
+      final arrayQuestions = _processPostData(res);
+      _posts.addAll(arrayQuestions);
+      postSink( _posts );
+    }
+    return _processPostData(res);
+  }
+
   Future<List<Post>> getFavoriteQuestion([bool reload = false]) async {
     if(reload == true){
       _postPage = 0;
@@ -166,7 +189,7 @@ class PostProvider extends FatherClass{
 
   //Publicaciones como admin
 
-  Future<List<Post>> getPostAdmin([bool reload = false, int sort = 1]) async{
+  Future<List<Post>> getPostAdmin([bool reload = false, dynamic sort = 1]) async{
     if(reload == true){
       _posts.clear();
       _postPage = 0;
@@ -184,8 +207,11 @@ class PostProvider extends FatherClass{
       case 2:
         res = await apiProvider.get_api([_postPage.toString()], ApisEnum.getPostAdminAcending); 
         break;
-      default:
+      case 3:
         res = await apiProvider.get_api([_postPage.toString()], ApisEnum.getPostAdminFavorites); 
+        break;
+      default:
+        res = await apiProvider.get_api([_postPage.toString(), sort], ApisEnum.getPostAdminTypePost); 
         break;
     }
     print(res);

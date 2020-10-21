@@ -3,7 +3,7 @@ class ApisEnum{
   //Url
   // static const url = 'https://dry-anchorage-61118.herokuapp.com';
   // static const url = 'http://34.125.72.116:3800';
-  static const url = 'http://192.168.0.100:3800';
+  static const url = 'http://192.168.15.14:3800';
 
   //Auth
   static const login = '/api/usuario/login';
@@ -40,8 +40,9 @@ class ApisEnum{
   static const searchQuestion = '/api/publicacion/preguntas/buscar/?';
 
   static const getPostAdmin = '/api/publicacion/publicaciones/?';
-  static const getPostAdminAcending = '/api/publicacion/publicacionesAcending/:page?';
-  static const getPostAdminFavorites = '/api/publicacion/publicacionesFavoritas/:page?';
+  static const getPostAdminAcending = '/api/publicacion/publicacionesAcending/?';
+  static const getPostAdminFavorites = '/api/publicacion/publicacionesFavoritas/?';
+  static const getPostAdminTypePost = '/api/publicacion/publicaciones/?/tipoPublicacion/?';
   static const editPostAdmin = '/api/publicacion/editarPublicacion';
 
   static const getPostImage = '/api/publicacion/getImage/';

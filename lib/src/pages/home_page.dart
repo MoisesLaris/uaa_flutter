@@ -12,10 +12,20 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  PageController _pageController;
+
   void initState() {
     super.initState();
-
+    _pageController = PageController(initialPage: 0);
   }
+
+  @override
+  void dispose() { 
+    _pageController.dispose();
+    super.dispose();
+  }
+
+
   int _currentIndex = 0;
 
   @override
@@ -45,7 +55,7 @@ class _HomePageState extends State<HomePage> {
       onTap: (index){
         setState(() {
           _currentIndex = index;
-          //FlushbarFeedback.flushbar_feedback(context,'hola','mundo',Icons.check_circle,true);
+          _pageController.animateToPage(index, duration: Duration(milliseconds: 500), curve: Curves.easeOut);
         });
       },
       items: [
@@ -57,12 +67,26 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _callPage(int paginaActual) {
-    switch(paginaActual){
-      case 0: return MenuPage();
-      case 1: return FaqPage();
-      case 2: return ConfigurationPage();
-      default:
-        return MenuPage();
-    }
+    return PageView(
+      physics: BouncingScrollPhysics(),
+      controller: _pageController,
+      onPageChanged: (index){
+        setState(() {
+          _currentIndex = index;
+        });
+      },
+      children: <Widget>[
+        MenuPage(),
+        FaqPage(),
+        ConfigurationPage()
+      ],
+    );
+    // switch(paginaActual){
+    //   case 0: return MenuPage();
+    //   case 1: return FaqPage();
+    //   case 2: return ConfigurationPage();
+    //   default:
+    //     return MenuPage();
+    // }
   }
 }

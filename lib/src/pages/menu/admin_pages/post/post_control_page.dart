@@ -1,9 +1,11 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:form_validation/src/models/postType_model.dart';
 import 'package:form_validation/src/models/post_model.dart';
 import 'package:form_validation/src/pages/menu/admin_pages/post/post_new_edit.dart';
 import 'package:form_validation/src/providers/publicacion_provider.dart';
+import 'package:form_validation/src/providers/tipoPublicacion_provider.dart';
 import 'package:form_validation/src/search/search_delegate.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -19,14 +21,21 @@ class PostControlPage extends StatefulWidget {
 
 class _PostControlPageState extends State<PostControlPage> {
   final postProvider = PostProvider();
+  final postTypeProvider = PostTypeProvider();
+
+  PostType postTypeSelected;
+  List<PostType> postTypeList;
+  Future<List<PostType>> futurePostTypeList;
+
   ScrollController _scrollController;
   bool _isLoading = false;
-  int filtros = 1;
+  dynamic filtros = 1;
 
 
   @override
   void initState() {
     this.postProvider.getPostAdmin(false,filtros);
+    this.futurePostTypeList = this.postTypeProvider.getPostTypes();
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
     super.initState();
@@ -123,7 +132,7 @@ class _PostControlPageState extends State<PostControlPage> {
               }
             ),
             SpeedDialChild(
-              child: Icon(Icons.timer),
+              child: Icon(Icons.timelapse),
               backgroundColor: Colors.green,
               label: 'Primeras publicaciones',
               onTap: () {
@@ -131,6 +140,19 @@ class _PostControlPageState extends State<PostControlPage> {
                 postProvider.getPostAdmin(true,filtros);
                 setState(() {
                   
+                });
+              }
+            ),
+            SpeedDialChild(
+              child: Icon(Icons.view_headline),
+              backgroundColor: Colors.green,
+              label: 'Filtrar por tipo publicación',
+              onTap: () {
+                _openDialog(context)
+                .then((value) {
+                  setState(() {
+                    postProvider.getPostAdmin(true,filtros);
+                  });
                 });
               }
             ),
@@ -252,5 +274,97 @@ class _PostControlPageState extends State<PostControlPage> {
       return Container();
     }
   }
+
+
+  Future<void> _openDialog(BuildContext context) {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: true,
+    builder: (BuildContext context) {
+      return StatefulBuilder(
+        builder: (context, state) {
+         return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0)
+          ),
+          title: Text('Tipo Publicación'),
+
+          content: FutureBuilder(
+            builder: (BuildContext context, AsyncSnapshot<List<PostType>> snapshot){
+            if(snapshot.connectionState == ConnectionState.done){
+              if(snapshot.hasData){
+                print('entro');
+                postTypeList = snapshot.data;
+                if(postTypeSelected == null){
+                  postTypeSelected = postTypeList[0];
+                }
+                return _crearDropdown(state);
+              }else{
+                return Center(child: Text('Tipos publicación no encontradas', overflow: TextOverflow.ellipsis,),);
+              }
+          }else{
+              return Center(child: CircularProgressIndicator(),);
+          }
+          },
+          future: this.futurePostTypeList,
+          
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Cancelar', style: TextStyle(color: Colors.red),),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            FlatButton(
+              child: Row(
+                children: <Widget>[
+                  Icon(Icons.search),
+                  Text('Buscar'),
+                ],
+              ),
+              onPressed: () {
+                filtros = postTypeSelected.id;
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+          );
+        }
+      );
+    },
+  );
+}
+
+Widget _crearDropdown(Function state){
+    
+    final dropdown = DropdownButton<PostType>(
+      value: postTypeSelected,
+      icon: Icon(Icons.arrow_drop_down),
+      iconSize: 24,
+      elevation: 16,
+      style: TextStyle(color: Colors.blueAccent),
+      underline: Container(
+        height: 1,
+        color: Colors.blueAccent,
+      ),
+      onChanged: (PostType newValue) {
+        state(() {
+          postTypeSelected = newValue;
+          print(postTypeSelected.nombre);
+        });
+      },
+      items: postTypeList.map<DropdownMenuItem<PostType>>((PostType postType) {
+        return DropdownMenuItem<PostType>(
+          value: postType,
+          child: Text(postType.nombre),
+        );
+      }).toList(),
+    );
+    return dropdown;
+
+    
+  }
+
 
 }

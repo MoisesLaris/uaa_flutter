@@ -8,11 +8,11 @@ class FaqPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Container(
-          alignment: Alignment.topLeft,
-              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-              child: Text('FAQ', style: TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold,),),
-        ),
+        // Container(
+        //   alignment: Alignment.topLeft,
+        //       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+        //       child: Text('Preguntas', style: TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold,),),
+        // ),
         Expanded(child: _crearMenusPreguntas(context))
       ],
       

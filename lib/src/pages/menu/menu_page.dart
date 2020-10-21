@@ -35,7 +35,7 @@ class MenuPage extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       itemCount: arrayMenuItems.length,
       itemBuilder: (BuildContext context, int index) => ShowMenuItemWidget(itemMenu: arrayMenuItems[index]),
-      staggeredTileBuilder: (int index) => StaggeredTile.extent(1, 130.0),
+      staggeredTileBuilder: (int index) => StaggeredTile.extent(2, 130.0),
     );
   }
 }

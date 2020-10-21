@@ -29,6 +29,7 @@ class _CommentWidgetState extends State<CommentWidget> {
   ScrollController _scrollController;
   bool isAdmin = false;
   bool _callInProgresss = false;
+  String myComment = '';
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -40,6 +41,7 @@ class _CommentWidgetState extends State<CommentWidget> {
   @override
   void initState() {
     this.isAdmin = this.prefs.isAdmin;
+    this.myComment = this.prefs.idUser;
     comentarioProvider.getComment(this.widget.idPost);
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
@@ -112,6 +114,7 @@ class _CommentWidgetState extends State<CommentWidget> {
   }
 
   Widget _crearComentarios(List<Comment> comentarios, BuildContext context){
+    print(this.myComment);
     return RefreshIndicator(
         onRefresh: (){
           return comentarioProvider.getComment(this.widget.idPost, true);
@@ -130,7 +133,7 @@ class _CommentWidgetState extends State<CommentWidget> {
               ),
               title: Text(comentarios[index].comentario),
               subtitle: Text(timeago.format(comentarios[index].fecha)),
-              trailing: this.isAdmin ? IconButton(icon: Icon(Icons.delete), onPressed: () => _deleteCommentDialog(comentarios[index], index, context)) : Icon(Icons.visibility),
+              trailing: (this.isAdmin || this.myComment == comentarios[index].idUser.id) ? IconButton(icon: Icon(Icons.delete), onPressed: () => _deleteCommentDialog(comentarios[index], index, context)) : IgnorePointer(),
             ),
           );
         },

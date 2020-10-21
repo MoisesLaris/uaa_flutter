@@ -44,13 +44,13 @@ class User {
   }
 
   User.fromJsonMap(Map<String,dynamic> json){
-    id = json['_id'];
-    nombre = json['nombre'];
-    apellidos = json['apellidos'];
-    email = json['email'];
-    password = json['password'];
-    isAdmin = json['isAdmin'];
-    image = json['image'];
+    json.containsKey('_id') ? this.id = json['_id'] : this.id = '';
+    json.containsKey('nombre') ? this.nombre = json['nombre'] : this.nombre = '';
+    json.containsKey('apellidos') ? this.apellidos = json['apellidos'] : this.apellidos = '';
+    json.containsKey('email') ? this.email = json['email'] : this.email = '';
+    json.containsKey('password') ? this.password = json['password'] : this.password = '';
+    json.containsKey('isAdmin') ? this.isAdmin = json['isAdmin'] : this.isAdmin = false;
+    json.containsKey('image') ? json['image'] != null ? this.image = json['image'] : this.image = 'none' : this.image = 'none';
   }
 
 }

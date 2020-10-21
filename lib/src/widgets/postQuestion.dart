@@ -16,8 +16,7 @@ class PostQuestion extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    final _screenSize = MediaQuery.of(context).size;
-
+    
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -32,7 +31,7 @@ class PostQuestion extends StatelessWidget {
           controller: _scrollController,
           itemCount: posts.length,
           itemBuilder: (BuildContext context, int index) {
-            return _tarjetaPost(posts[index], context);
+              return _tarjetaPost(posts[index], context);
           },
         ),
       ),
@@ -40,7 +39,7 @@ class PostQuestion extends StatelessWidget {
   }
 
   Widget _tarjetaPost(Post post, BuildContext context) {
-
+    print(post.idUser.image);
     return FadeIn(
       child: Card(
         elevation: 10,

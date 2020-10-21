@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:form_validation/src/models/post_model.dart';
 import 'package:form_validation/src/providers/publicacion_provider.dart';
 import 'package:form_validation/src/search/search_delegate.dart';
 import 'package:form_validation/src/widgets/postQuestion.dart';
@@ -71,10 +72,13 @@ class _QuestionControlPageState extends State<QuestionControlPage> {
           // ),
           StreamBuilder(
             stream: postProvider.postStream,
-            builder: (BuildContext context, AsyncSnapshot snapshot){
+            builder: (BuildContext context, AsyncSnapshot<List<Post>> snapshot){
               if(snapshot.hasData){
-                print(snapshot.data);
-                return PostQuestion(posts: snapshot.data, siguientePagina: this.postFunction);
+                if(snapshot.data.length > 0){
+                  return PostQuestion(posts: snapshot.data, siguientePagina: this.postFunction);
+                }else{
+                  return Center(child: Text('Ninguna pregunta'));
+                }
               }else{
                 return Center(child: CircularProgressIndicator());
               }

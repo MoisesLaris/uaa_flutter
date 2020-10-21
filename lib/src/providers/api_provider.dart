@@ -47,6 +47,7 @@ class ApiProvider{
     if(params.length > 0){
       //Se hace la llamada sin parametros
       api = _urlParams(params, api);
+      print(api);
     }
     //Aqui se hace la llamada
     http.Response resp = await http.get(ApisEnum.url + api, headers: _headers);

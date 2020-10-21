@@ -1,3 +1,4 @@
+
 import 'package:form_validation/src/models/user_model.dart';
 
 class Comments{
@@ -8,8 +9,8 @@ class Comments{
   Comments.fromJsonList(List<dynamic> jsonList){
     if(jsonList == null) return;
     for(var item in jsonList){
-      final user = new Comment.fromJsonMap(item);
-      items.add( user );
+      final comment = new Comment.fromJsonMap(item);
+      items.add( comment );
     }
   }
 }
