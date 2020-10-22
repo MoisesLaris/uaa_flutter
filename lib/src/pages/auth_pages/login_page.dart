@@ -1,24 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:form_validation/src/bloc/provider.dart';
 import 'package:form_validation/src/models/response_model.dart';
 import 'package:form_validation/src/pages/home_page.dart';
 import 'package:form_validation/src/providers/usuario_provider.dart';
 import 'package:form_validation/src/widgets/flushbar_feedback.dart';
+import 'package:form_validation/theme/theme.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:provider/provider.dart' as providerDart;
 
 class LoginPage extends StatelessWidget {
   final usuarioProvider = new UsuarioProvider();
+  final _formKey = GlobalKey<FormState>();
+  
+  String _correo = '';
+  String _password = '';
+
+  bool isDark = false;
+  
 
   @override
   Widget build(BuildContext context) {
+    this.isDark = providerDart.Provider.of<ThemeChanger>(context).darkTheme;
     return Scaffold(
       body: FutureBuilder(
         future: usuarioProvider.verifyJWT(),
         builder: (context, snapshot) {
-           if (!snapshot.hasData) 
-              return Center(child: CircularProgressIndicator());
-            else
-              return _redireccion(context, snapshot.data);
+          if (!snapshot.hasData)
+            return Center(child: CircularProgressIndicator());
+          else
+            return _redireccion(context, snapshot.data);
         },
       ),
     );
@@ -105,130 +114,144 @@ class LoginPage extends StatelessWidget {
   }
 
   Widget _loginForm(BuildContext context) {
-    final bloc = Provider.of(context);
     final size = MediaQuery.of(context).size;
 
     return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          SafeArea(
-              child: Container(
-            height: 180.0,
-          )),
-          Container(
-            width: size.width * .85,
-            padding: EdgeInsets.symmetric(vertical: 50.0),
-            margin: EdgeInsets.symmetric(vertical: 30.0),
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 3.0,
-                      offset: Offset(0.0, 3.0),
-                      spreadRadius: 3.0)
-                ]),
-            child: Column(
-              children: <Widget>[
-                Text(
-                  'Ingreso',
-                  style: TextStyle(fontSize: 20.0),
-                ),
-                SizedBox(
-                  height: 60.0,
-                ),
-                _crearEmail(bloc),
-                SizedBox(
-                  height: 30.0,
-                ),
-                _crearPassword(bloc),
-                SizedBox(
-                  height: 30.0,
-                ),
-                _crearBoton(bloc)
-              ],
+      physics: BouncingScrollPhysics(),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: <Widget>[
+            SafeArea(
+                child: Container(
+              height: 180.0,
+            )),
+            Container(
+              width: size.width * .85,
+              padding: EdgeInsets.symmetric(vertical: 50.0),
+              margin: EdgeInsets.symmetric(vertical: 30.0),
+              decoration: BoxDecoration(
+                  color: this.isDark ? Colors.grey[800] : Colors.white,
+                  borderRadius: BorderRadius.circular(10.0),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 3.0,
+                        offset: Offset(0.0, 3.0),
+                        spreadRadius: 3.0)
+                  ]),
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    'Ingreso',
+                    style: TextStyle(fontSize: 20.0),
+                  ),
+                  SizedBox(
+                    height: 60.0,
+                  ),
+                  _crearEmail(),
+                  SizedBox(
+                    height: 30.0,
+                  ),
+                  _crearPassword(),
+                  SizedBox(
+                    height: 30.0,
+                  ),
+                  _crearBoton(context)
+                ],
+              ),
             ),
-          ),
-          FlatButton(
-              onPressed: () =>
-                  Navigator.pushReplacementNamed(context, 'registro'),
-              child: Text('Crear una nueva cuenta')),
-          SizedBox(
-            height: 100.0,
-          )
-        ],
+            FlatButton(
+                onPressed: () =>
+                    Navigator.pushReplacementNamed(context, 'registro'),
+                child: Text('Crear una nueva cuenta')),
+            SizedBox(
+              height: 100.0,
+            )
+          ],
+        ),
       ),
     );
   }
 
-  Widget _crearEmail(LoginBloc bloc) {
-    return StreamBuilder(
-      stream: bloc.emailStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Container(
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
-          child: TextField(
-            keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
-                suffixIcon: Icon(Icons.email, color: Colors.deepPurple),
-                hintText: 'ejemplo@correo.com',
-                labelText: 'Correo electrónico',
-                counterText: snapshot.data,
-                errorText: snapshot.error),
-            onChanged: bloc.changeEmail,
+  Widget _crearEmail() {
+    return Container(
+      padding: EdgeInsets.symmetric
+      (horizontal: 20.0),
+      child: TextFormField(
+        validator: (value){
+          Pattern pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+          RegExp regExp = new RegExp(pattern);
+          if(!regExp.hasMatch(value)){
+            return 'Ingrese correo valido';
+          }
+          return null;
+        },
+        keyboardType: TextInputType.emailAddress,
+        decoration: InputDecoration(
+            border:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
+            suffixIcon: Icon(Icons.email),
+            hintText: 'ejemplo@correo.com',
+            labelText: 'Correo electrónico',
           ),
-        );
-      },
+        onSaved: (value){
+          this._correo = value;
+        },
+      ),
     );
   }
 
-  Widget _crearPassword(LoginBloc bloc) {
-    return StreamBuilder(
-      stream: bloc.passwordStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Container(
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
-          child: TextField(
-            obscureText: true,
-            decoration: InputDecoration(
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
-                suffixIcon: Icon(Icons.lock, color: Colors.deepPurple),
-                labelText: 'Contraseña',
-                counterText: snapshot.data,
-                errorText: snapshot.error),
-            onChanged: bloc.changePassword,
-          ),
-        );
-      },
+  Widget _crearPassword() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      child: TextFormField(
+        obscureText: true,
+        validator: (value) => value.length > 6 ? null : 'Ingrese mas de 6 caracteres',
+        decoration: InputDecoration(
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
+          suffixIcon: Icon(Icons.lock),
+          labelText: 'Contraseña',
+        ),
+        onSaved: (value){
+          this._password = value;
+        },
+      ),
     );
   }
 
-  Widget _crearBoton(LoginBloc bloc) {
-    // formValidStream
-    // snapshot.hasdata true ? algositure : algosifalse
+  Widget _crearBoton(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 70.0,
+      margin: EdgeInsets.only(bottom: 20.0),
+      padding: EdgeInsets.symmetric(horizontal: 50.0, vertical: 10.0),
+      child: RaisedButton(
+        child: Text('Enviar', style: TextStyle(fontSize: 16.0 ,color: Colors.white),),
+        color: Colors.blue,
+        elevation: 5.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        onPressed: (){
+          if(_formKey.currentState.validate()){
+  
+              FocusScopeNode currentFocus = FocusScope.of(context);
 
-    return StreamBuilder(
-        stream: bloc.formValidStream,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          return RaisedButton(
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 20.0),
-                child: Text('Ingresar'),
-              ),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0)),
-              elevation: 0.0,
-              color: Colors.deepPurple,
-              textColor: Colors.white,
-              onPressed: snapshot.hasData ? () => _login(bloc, context) : null);
-        });
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+              _formKey.currentState.save();
+              _login(context);
+            }
+          }
+        )
+      );
+            
+
   }
 
-  _login(LoginBloc bloc, BuildContext context) async {
+  _login(BuildContext context) async {
     final pr = ProgressDialog(context,
         type: ProgressDialogType.Normal, isDismissible: false, showLogs: true);
     pr.style(
@@ -236,13 +259,13 @@ class LoginPage extends StatelessWidget {
       insetAnimCurve: Curves.easeInOut,
     );
     await pr.show();
-    ResponseModel responseModel = await this.usuarioProvider.login(bloc.email, bloc.password);
+    ResponseModel responseModel =
+        await this.usuarioProvider.login(this._correo, this._password);
     if (responseModel.success) {
       pr.update(message: responseModel.message);
       await pr.hide();
       Navigator.pushReplacementNamed(context, 'home');
-      FlushbarFeedback.flushbar_feedback(
-          context, 'Bienvenido', ' ', true);
+      FlushbarFeedback.flushbar_feedback(context, 'Bienvenido', ' ', true);
     } else {
       await pr.hide();
       FlushbarFeedback.flushbar_feedback(

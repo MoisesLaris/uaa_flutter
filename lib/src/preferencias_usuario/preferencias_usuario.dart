@@ -18,12 +18,13 @@ class PreferenciasUsuario{
     this._prefs = await SharedPreferences.getInstance();
   }
 
-  //Ninguna de estas propiedades se usa
-  // bool _email;
-  // int _apellidos;
-  // String _nombre;
+  get darkMode{
+    return _prefs.getBool('darkMode') ?? false;
+  }
 
-  //GET y SET del apellidos
+  set darkMode(bool value){
+    this._prefs.setBool('darkMode', value);
+  }
 
   get token{
     return _prefs.getString('token') ?? ' ';

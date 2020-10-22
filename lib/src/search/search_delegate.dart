@@ -15,6 +15,9 @@ class DataSearch extends SearchDelegate {
   }
 
   @override
+   ThemeData appBarTheme(BuildContext context) => Theme.of(context);
+
+  @override
   List<Widget> buildActions(BuildContext context) {
     //Las acciones de nuestro appBar  
     return [

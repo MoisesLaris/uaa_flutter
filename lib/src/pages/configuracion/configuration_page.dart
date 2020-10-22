@@ -1,5 +1,6 @@
 import 'dart:io';
-
+import 'package:form_validation/theme/theme.dart';
+import 'package:provider/provider.dart' as providerDart;
 import 'package:flutter/material.dart';
 import 'package:form_validation/enums/enum_apis.dart';
 import 'package:form_validation/src/preferencias_usuario/preferencias_usuario.dart';
@@ -17,10 +18,13 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
   final prefs = PreferenciasUsuario();
   final usuarioProvider = UsuarioProvider();
   final picker = ImagePicker();
+  ThemeChanger appTheme;
   File image = null;
 
   @override
   Widget build(BuildContext context) {
+    this.appTheme = providerDart.Provider.of<ThemeChanger>(context);
+
     return SingleChildScrollView(
       child: Container(
           width: double.infinity,
@@ -89,14 +93,15 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
   Widget _cuenta() {
     return Container(
       child: ListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
-        leading: Icon(
-          Icons.account_circle,
-          size: 30.0,
+        leading: Icon(Icons.lightbulb_outline),
+        title: Text('Dark mode'),
+        trailing: Switch.adaptive(
+          value: this.appTheme.darkTheme, 
+          onChanged: (value){
+            this.appTheme.darkTheme = value;
+            this.prefs.darkMode = value;
+          } 
         ),
-        title: Text('Cuenta'),
-        trailing: Icon(Icons.arrow_forward_ios),
-        onTap: () {},
       ),
     );
   }

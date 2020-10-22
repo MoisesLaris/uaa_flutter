@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:form_validation/src/models/app_models/menuitem_model.dart';
+import 'package:form_validation/theme/theme.dart';
+import 'package:provider/provider.dart';
  
 class ShowMenuItemWidget extends StatelessWidget {
   final MenuItem_Model itemMenu;
@@ -10,6 +12,7 @@ class ShowMenuItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = Provider.of<ThemeChanger>(context).darkTheme;
     return RaisedButton(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
@@ -53,7 +56,7 @@ class ShowMenuItemWidget extends StatelessWidget {
           Navigator.pushNamed(context, this.itemMenu.route);
         }
       },
-      color: Colors.white,
+      color: isDark ? Colors.grey[800] : Colors.white,
       
     );
   }

@@ -31,8 +31,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
 
-    final bloc = Provider.of(context);
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
