@@ -43,8 +43,7 @@ class ThemeChanger with ChangeNotifier{
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: Colors.pink,
         ),
-        toggleableActiveColor: Colors.pink
-        
+        toggleableActiveColor: Colors.pink,
       );
     }else{
       _currentTheme = ThemeData.light();
