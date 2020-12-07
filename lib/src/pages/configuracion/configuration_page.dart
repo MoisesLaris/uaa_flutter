@@ -60,7 +60,7 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
           ),
           Text(
             prefs.email,
-            style: TextStyle(fontSize: 16.0, color: Colors.blue),
+            style: TextStyle(fontSize: 16.0, color: this.appTheme.darkTheme ? Colors.pink : Colors.blue),
           )
         ],
       ),
@@ -97,6 +97,7 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
         title: Text('Dark mode'),
         trailing: Switch.adaptive(
           value: this.appTheme.darkTheme, 
+          activeColor: Colors.pink,
           onChanged: (value){
             this.appTheme.darkTheme = value;
             this.prefs.darkMode = value;

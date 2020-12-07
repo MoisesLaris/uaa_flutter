@@ -15,10 +15,10 @@ class MenuPage extends StatelessWidget {
   }
 
   void _listaDeMenus(){
-    if(_prefs.isAdmin == true){
-      arrayMenuItems = menuItems;
-      return;
-    }
+    // if(_prefs.isAdmin == true){
+    //   arrayMenuItems = menuItems;
+    //   return;
+    // }
     menuItems.forEach((menu) {
       if(_prefs.isAdmin == menu.isAdmin){
         arrayMenuItems.add(menu);
