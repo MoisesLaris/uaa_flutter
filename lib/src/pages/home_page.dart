@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:form_validation/src/bloc/provider.dart';
 import 'package:form_validation/src/pages/configuracion/configuration_page.dart';
 import 'package:form_validation/src/pages/faq/faq_page.dart';
+import 'package:form_validation/src/pages/menu/admin_pages/post/post_control_page.dart';
 import 'package:form_validation/src/pages/menu/menu_page.dart';
+import 'package:form_validation/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:form_validation/src/providers/usuario_provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,6 +15,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   PageController _pageController;
+  final _prefs = PreferenciasUsuario();
 
   void initState() {
     super.initState();
@@ -74,7 +77,7 @@ class _HomePageState extends State<HomePage> {
         });
       },
       children: <Widget>[
-        MenuPage(),
+        _prefs.isAdmin ? MenuPage() : PostControlPage(false),
         FaqPage(),
         ConfigurationPage()
       ],

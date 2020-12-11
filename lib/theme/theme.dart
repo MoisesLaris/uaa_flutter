@@ -45,8 +45,6 @@ class ThemeChanger with ChangeNotifier{
           backgroundColor: Colors.pink,
         ),
         toggleableActiveColor: Colors.pink,
-        textSelectionColor: Colors.pink,
-        textSelectionHandleColor: Colors.pink,
       );
     }else{
       _currentTheme = ThemeData.light();

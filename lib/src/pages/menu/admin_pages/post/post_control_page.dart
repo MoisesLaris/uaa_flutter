@@ -57,7 +57,7 @@ class _PostControlPageState extends State<PostControlPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: widget.isAdmin ? AppBar(
         title: Text('Publicaciones'),
         centerTitle: true,
         actions: this.widget.isAdmin ?  <Widget>[
@@ -73,7 +73,7 @@ class _PostControlPageState extends State<PostControlPage> {
             showSearch(context: context, delegate: DataSearch())
           )
         ]
-      ),
+      ) : null,
       body: _futurePosts(context),
       floatingActionButton: SpeedDial(
           // both default to 16
@@ -102,6 +102,8 @@ class _PostControlPageState extends State<PostControlPage> {
             SpeedDialChild(
               child: Icon(Icons.search),
               backgroundColor: Colors.indigo,
+              foregroundColor: Colors.white,
+              labelStyle: TextStyle(color: Colors.black),
               label: 'Buscar...',
               onTap: () {
                 showSearch(context: context, delegate: DataSearch());
@@ -110,6 +112,8 @@ class _PostControlPageState extends State<PostControlPage> {
             SpeedDialChild(
               child: Icon(Icons.star),
               backgroundColor: Colors.yellow[700],
+              foregroundColor: Colors.white,
+              labelStyle: TextStyle(color: Colors.black),
               label: 'Más estrellas',
               onTap: () {
                 filtros = 3;
@@ -122,6 +126,8 @@ class _PostControlPageState extends State<PostControlPage> {
             SpeedDialChild(
               child: Icon(Icons.calendar_today),
               backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
+              labelStyle: TextStyle(color: Colors.black),
               label: 'Más recientes',
               onTap: () {
                 filtros = 1;
@@ -134,6 +140,8 @@ class _PostControlPageState extends State<PostControlPage> {
             SpeedDialChild(
               child: Icon(Icons.timelapse),
               backgroundColor: Colors.green,
+              foregroundColor: Colors.white,
+              labelStyle: TextStyle(color: Colors.black),
               label: 'Primeras publicaciones',
               onTap: () {
                 filtros = 2;
@@ -146,6 +154,8 @@ class _PostControlPageState extends State<PostControlPage> {
             SpeedDialChild(
               child: Icon(Icons.view_headline),
               backgroundColor: Colors.green,
+              foregroundColor: Colors.white,
+              labelStyle: TextStyle(color: Colors.black),
               label: 'Filtrar por tipo publicación',
               onTap: () {
                 _openDialog(context)
